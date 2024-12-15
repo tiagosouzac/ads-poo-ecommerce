@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: ecommerce
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ecommerce
+    username: user
+    password: password
+  jpa:
+    database: postgresql
+    generate-ddl: true
+    defer-datasource-initialization: true
