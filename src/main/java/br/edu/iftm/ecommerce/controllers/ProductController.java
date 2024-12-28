@@ -2,6 +2,8 @@ package br.edu.iftm.ecommerce.controllers;
 
 import br.edu.iftm.ecommerce.models.Product;
 import br.edu.iftm.ecommerce.repositories.ProductRepository;
+import br.edu.iftm.ecommerce.strategies.product.DeleteProductStrategy;
+import br.edu.iftm.ecommerce.strategies.product.SaveProductStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -10,10 +12,14 @@ import java.util.List;
 @Controller
 public class ProductController {
     private final ProductRepository productRepository;
+    private final SaveProductStrategy saveProductStrategy;
+    private final DeleteProductStrategy deleteProductStrategy;
 
     @Autowired
     public ProductController(ProductRepository productRepository) {
         this.productRepository = productRepository;
+        this.saveProductStrategy = new SaveProductStrategy();
+        this.deleteProductStrategy = new DeleteProductStrategy();
     }
 
     public List<Product> getProducts() {
@@ -21,10 +27,10 @@ public class ProductController {
     }
 
     public void saveProduct(Product product) {
-        this.productRepository.save(product);
+        this.saveProductStrategy.execute(product, this.productRepository);
     }
 
     public void deleteProduct(Product product) {
-        this.productRepository.delete(product);
+        this.deleteProductStrategy.execute(product, this.productRepository);
     }
 }
