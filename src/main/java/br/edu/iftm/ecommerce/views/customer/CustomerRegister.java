@@ -92,6 +92,7 @@ public class CustomerRegister extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(102, 102, 102));
 
@@ -418,7 +419,6 @@ public class CustomerRegister extends javax.swing.JFrame {
         customer.setEmail(strEmail);
         customer.setPhone(strPhone);
 
-        // Caso já exista um endereço, associamos ao cliente
         if (existingAddress != null) {
             customer.setAddresses(List.of(existingAddress));
         } else {
@@ -432,12 +432,10 @@ public class CustomerRegister extends javax.swing.JFrame {
             newAddress.setCountry(strCountry);
             newAddress.setZipCode(strZipCode);
 
-            // Aqui associamos o cliente ao endereço, mas ainda não vamos salvar o endereço
             newAddress.setAddressable(customer);
             customer.setAddresses(List.of(newAddress));
         }
 
-        // Agora o cliente será salvo, o que salvará o endereço devido ao CascadeType.ALL
         controller.saveCustomer(customer); 
         JOptionPane.showMessageDialog(this, "Cliente cadastrado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
     } catch (Exception ex) {

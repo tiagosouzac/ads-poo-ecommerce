@@ -1,8 +1,8 @@
-package br.edu.iftm.ecommerce.views.customer;
+package br.edu.iftm.ecommerce.views.brands;
 
 import br.edu.iftm.ecommerce.EcommerceApplication;
-import br.edu.iftm.ecommerce.controllers.CustomerController;
-import br.edu.iftm.ecommerce.models.Customer;
+import br.edu.iftm.ecommerce.controllers.BrandController;
+import br.edu.iftm.ecommerce.models.Brand;
 import br.edu.iftm.ecommerce.views.menu.MenuView;
 import jakarta.annotation.PostConstruct;
 import java.util.List;
@@ -15,24 +15,24 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CustomerList extends javax.swing.JFrame {
+public class BrandList extends javax.swing.JFrame {
     
     @Autowired
-    private CustomerController customerController;
-    private List<Customer> customerList;
+    private BrandController controller;
+    private List<Brand> list;
     
     private final ApplicationContext context;
 
     /**
      * Creates new form RegisterCategory
      */
-    public CustomerList(ApplicationContext context) {
+    public BrandList(ApplicationContext context) {
         initComponents();
         this.context = context;
         this.addWindowListener(new java.awt.event.WindowAdapter() {
         @Override
         public void windowActivated(java.awt.event.WindowEvent e) {
-            updateCustomerList();
+            updateBrandList();
         }
     });
     }
@@ -54,7 +54,8 @@ public class CustomerList extends javax.swing.JFrame {
         searchTxt = new javax.swing.JTextField();
         searchButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        customerTable = new javax.swing.JTable();
+        brandTable = new javax.swing.JTable();
+        jLabel5 = new javax.swing.JLabel();
         menuButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -69,7 +70,7 @@ public class CustomerList extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 22)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Lista de Clientes");
+        jLabel1.setText("Lista de Marcas");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -101,18 +102,18 @@ public class CustomerList extends javax.swing.JFrame {
             }
         });
 
-        customerTable.setModel(new javax.swing.table.DefaultTableModel(
+        brandTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "ID", "Nome", "E-mail", "Telefone"
+                "ID", "Nome", "Site", "E-mail", "Telefone"
             }
         ));
-        jScrollPane1.setViewportView(customerTable);
+        jScrollPane1.setViewportView(brandTable);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -139,9 +140,15 @@ public class CustomerList extends javax.swing.JFrame {
                     .addComponent(searchTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(searchButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(38, 38, 38))
         );
+
+        jLabel5.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 22)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setText("Lista de Categorias");
 
         menuButton.setBackground(new java.awt.Color(102, 0, 51));
         menuButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -163,19 +170,29 @@ public class CustomerList extends javax.swing.JFrame {
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(34, 34, 34)
+                .addGap(58, 58, 58)
                 .addComponent(menuButton)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(2, 2, 2)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGap(2, 2, 2)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(menuButton)
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(285, 285, 285)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGap(286, 286, 286)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -186,50 +203,50 @@ public class CustomerList extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void searchAndUpdateTable() {
-        String searchText = searchTxt.getText().trim();
-
-        if (searchText.isEmpty()) {
-            fillTable(customerList); 
-        } else {
-            List<Customer> filteredList = customerList.stream()
-                    .filter(customer -> customer.getName().toLowerCase().contains(searchText.toLowerCase()))
-                    .collect(Collectors.toList());
-
-            fillTable(filteredList);
-
-            if (filteredList.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Nenhum cliente encontrado.");
-            }
-        }
-    }
-    
-    private void updateCustomerList() {
-        try {
-            this.customerList = customerController.getCustomers();
-            fillTable(this.customerList);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Erro ao atualizar marcas: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        }
-    }
+    private void menuButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButtonActionPerformed
+        MenuView menuView = context.getBean(MenuView.class);
+        menuView.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_menuButtonActionPerformed
 
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
         searchAndUpdateTable();
     }//GEN-LAST:event_searchButtonActionPerformed
 
-    private void menuButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButtonActionPerformed
-       MenuView menuView = context.getBean(MenuView.class);
-       menuView.setVisible(true);
-       dispose();
-    }//GEN-LAST:event_menuButtonActionPerformed
+    private void searchAndUpdateTable() {
+        String searchText = searchTxt.getText().trim();
+
+        if (searchText.isEmpty()) {
+            fillTable(list); 
+        } else {
+            List<Brand> filteredList = list.stream()
+                    .filter(brand -> brand.getName().toLowerCase().contains(searchText.toLowerCase()))
+                    .collect(Collectors.toList());
+
+            fillTable(filteredList);
+
+            if (filteredList.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Nenhuma marca encontrada.");
+            }
+        }
+    }
+    
+    private void updateBrandList() {
+        try {
+            this.list = controller.getBrands();
+            fillTable(this.list);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao atualizar marcas: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -248,22 +265,14 @@ public class CustomerList extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CustomerList.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BrandList.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CustomerList.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BrandList.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CustomerList.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BrandList.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CustomerList.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BrandList.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -279,8 +288,8 @@ public class CustomerList extends javax.swing.JFrame {
                 ApplicationContext context = SpringApplication.run(EcommerceApplication.class, args);
 
             java.awt.EventQueue.invokeLater(() -> {
-                CustomerList customerList = context.getBean(CustomerList.class);
-                customerList.setVisible(true);
+                BrandList brandList = context.getBean(BrandList.class);
+                brandList.setVisible(true);
             });
             }
         });
@@ -289,33 +298,35 @@ public class CustomerList extends javax.swing.JFrame {
     @PostConstruct
     private void initData() {
         try {
-            this.customerList = customerController.getCustomers();
-            fillTable(this.customerList);
+            this.list = controller.getBrands();
+            fillTable(this.list);
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Erro ao carregar clientes: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Erro ao carregar marcas: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }
 
-    private void fillTable(List<Customer> list)
+    private void fillTable(List<Brand> list)
     {  
         DefaultTableModel table = (DefaultTableModel)
-        customerTable.getModel();
-        customerTable.getColumnModel().getColumn(0).setPreferredWidth(180);
-        customerTable.getColumnModel().getColumn(1).setPreferredWidth(180);
-        customerTable.getColumnModel().getColumn(2).setPreferredWidth(180); 
-        customerTable.getColumnModel().getColumn(3).setPreferredWidth(180); 
+        brandTable.getModel();
+        brandTable.getColumnModel().getColumn(0).setPreferredWidth(180);
+        brandTable.getColumnModel().getColumn(1).setPreferredWidth(180);
+        brandTable.getColumnModel().getColumn(2).setPreferredWidth(180); 
+        brandTable.getColumnModel().getColumn(3).setPreferredWidth(180); 
+        brandTable.getColumnModel().getColumn(4).setPreferredWidth(180); 
         table.setNumRows(0);
 
-        list.forEach(customerItem -> {
-            table.addRow(new Object[]{customerItem.getId(), customerItem.getName(), customerItem.getEmail(), customerItem.getPhone()});
+        list.forEach(brandItem -> {
+            table.addRow(new Object[]{brandItem.getId(), brandItem.getName(), brandItem.getWebsite(), brandItem.getEmail(), brandItem.getPhone()});
         }); 
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable customerTable;
+    private javax.swing.JTable brandTable;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

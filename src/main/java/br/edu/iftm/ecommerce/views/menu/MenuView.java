@@ -1,5 +1,7 @@
 package br.edu.iftm.ecommerce.views.menu;
 
+import br.edu.iftm.ecommerce.views.brands.BrandList;
+import br.edu.iftm.ecommerce.views.brands.BrandRegister;
 import br.edu.iftm.ecommerce.views.category.CategoryList;
 import br.edu.iftm.ecommerce.views.category.CategoryRegister;
 import br.edu.iftm.ecommerce.views.customer.CustomerList;
@@ -21,6 +23,12 @@ public class MenuView extends javax.swing.JFrame {
     
     @Autowired
     CustomerList customerList;
+    
+    @Autowired
+    BrandRegister brandRegister;
+    
+    @Autowired
+    BrandList brandList;
 
     
     /**
@@ -57,6 +65,7 @@ public class MenuView extends javax.swing.JFrame {
         jMenuVenda = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(102, 102, 102));
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -96,6 +105,11 @@ public class MenuView extends javax.swing.JFrame {
         jMenuCadastro.add(jMenuItem2);
 
         jMenuItem3.setText("Cadastro Marca");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
         jMenuCadastro.add(jMenuItem3);
 
         jMenuItem4.setText("Cadastro Cliente");
@@ -125,6 +139,11 @@ public class MenuView extends javax.swing.JFrame {
         jMenuListagem.add(jMenuItem7);
 
         jMenuItem8.setText("Lista Marcas");
+        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem8ActionPerformed(evt);
+            }
+        });
         jMenuListagem.add(jMenuItem8);
 
         jMenuItem9.setText("Lista Clientes");
@@ -176,6 +195,16 @@ public class MenuView extends javax.swing.JFrame {
         customerList.setVisible(true);
         dispose();
     }//GEN-LAST:event_jMenuItem9ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        brandRegister.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+        brandList.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jMenuItem8ActionPerformed
 
     /**
      * @param args the command line arguments

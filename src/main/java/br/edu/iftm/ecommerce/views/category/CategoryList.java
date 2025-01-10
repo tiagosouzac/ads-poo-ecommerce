@@ -31,6 +31,7 @@ public class CategoryList extends javax.swing.JFrame {
      */
     public CategoryList(ApplicationContext context) {
         initComponents();
+        
         categoryTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
         @Override
         public void valueChanged(ListSelectionEvent e) {
@@ -39,7 +40,15 @@ public class CategoryList extends javax.swing.JFrame {
             }
         }
     });
+        
         this.context = context;
+        
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+        @Override
+        public void windowActivated(java.awt.event.WindowEvent e) {
+            updateCategoryList();
+        }
+    });
     }
 
     /**
@@ -71,6 +80,7 @@ public class CategoryList extends javax.swing.JFrame {
         menuButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(102, 102, 102));
 
@@ -282,22 +292,32 @@ public class CategoryList extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void searchAndUpdateTable() {
-    String searchText = searchTxt.getText().trim();
+        String searchText = searchTxt.getText().trim();
 
-    if (searchText.isEmpty()) {
-        fillTable(list); 
-    } else {
-        List<Category> filteredList = list.stream()
-                .filter(category -> category.getName().toLowerCase().contains(searchText.toLowerCase()))
-                .collect(Collectors.toList());
+        if (searchText.isEmpty()) {
+            fillTable(list); 
+        } else {
+            List<Category> filteredList = list.stream()
+                    .filter(category -> category.getName().toLowerCase().contains(searchText.toLowerCase()))
+                    .collect(Collectors.toList());
 
-        fillTable(filteredList);
+            fillTable(filteredList);
 
-        if (filteredList.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Nenhuma categoria encontrada.");
+            if (filteredList.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Nenhuma categoria encontrada.");
+            }
         }
     }
-}
+    
+    private void updateCategoryList() {
+        try {
+            this.list = controller.getCategories();
+            fillTable(this.list);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao atualizar marcas: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }
 
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
         searchAndUpdateTable();
