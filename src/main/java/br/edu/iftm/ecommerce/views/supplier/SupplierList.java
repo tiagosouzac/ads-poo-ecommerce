@@ -1,10 +1,10 @@
-package br.edu.iftm.ecommerce.views.customer;
+package br.edu.iftm.ecommerce.views.supplier;
 
 import br.edu.iftm.ecommerce.EcommerceApplication;
 import br.edu.iftm.ecommerce.controllers.AddressController;
-import br.edu.iftm.ecommerce.controllers.CustomerController;
+import br.edu.iftm.ecommerce.controllers.SupplierController;
 import br.edu.iftm.ecommerce.models.Address;
-import br.edu.iftm.ecommerce.models.Customer;
+import br.edu.iftm.ecommerce.models.Supplier;
 import br.edu.iftm.ecommerce.views.menu.MenuView;
 import jakarta.annotation.PostConstruct;
 import java.util.List;
@@ -20,11 +20,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CustomerList extends javax.swing.JFrame {
+public class SupplierList extends javax.swing.JFrame {
     
     @Autowired
-    private CustomerController customerController;
-    private List<Customer> customerList;
+    private SupplierController supplierController;
+    private List<Supplier> supplierList;
     
     @Autowired
     private AddressController addressController;
@@ -35,10 +35,10 @@ public class CustomerList extends javax.swing.JFrame {
     /**
      * Creates new form RegisterCategory
      */
-    public CustomerList(ApplicationContext context) {
+    public SupplierList(ApplicationContext context) {
         initComponents();
         
-        customerTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        supplierTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
         @Override
         public void valueChanged(ListSelectionEvent e) {
             if (!e.getValueIsAdjusting()) {
@@ -51,7 +51,7 @@ public class CustomerList extends javax.swing.JFrame {
         this.addWindowListener(new java.awt.event.WindowAdapter() {
         @Override
         public void windowActivated(java.awt.event.WindowEvent e) {
-            updateCustomerList();
+            updateSupplierList();
         }
     });
     }
@@ -73,7 +73,7 @@ public class CustomerList extends javax.swing.JFrame {
         searchTxt = new javax.swing.JTextField();
         searchButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        customerTable = new javax.swing.JTable();
+        supplierTable = new javax.swing.JTable();
         menuButton = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
@@ -106,7 +106,7 @@ public class CustomerList extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 22)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Lista de Clientes");
+        jLabel1.setText("Lista de Fornecedores");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -138,18 +138,18 @@ public class CustomerList extends javax.swing.JFrame {
             }
         });
 
-        customerTable.setModel(new javax.swing.table.DefaultTableModel(
+        supplierTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "ID", "Nome", "E-mail", "Telefone"
+                "ID", "Nome", "CNPJ", "Telefone", "E-mail"
             }
         ));
-        jScrollPane1.setViewportView(customerTable);
+        jScrollPane1.setViewportView(supplierTable);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -364,26 +364,26 @@ public class CustomerList extends javax.swing.JFrame {
         String searchText = searchTxt.getText().trim();
 
         if (searchText.isEmpty()) {
-            fillTable(customerList); 
+            fillTable(supplierList); 
         } else {
-            List<Customer> filteredList = customerList.stream()
-                    .filter(customer -> customer.getName().toLowerCase().contains(searchText.toLowerCase()))
+            List<Supplier> filteredList = supplierList.stream()
+                    .filter(supplier -> supplier.getName().toLowerCase().contains(searchText.toLowerCase()))
                     .collect(Collectors.toList());
 
             fillTable(filteredList);
 
             if (filteredList.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Nenhum cliente encontrado.");
+                JOptionPane.showMessageDialog(this, "Nenhum fornecedor encontrado.");
             }
         }
     }
     
-    private void updateCustomerList() {
+    private void updateSupplierList() {
         try {
-            this.customerList = customerController.getCustomers();
-            fillTable(this.customerList);
+            this.supplierList = supplierController.getSuppliers();
+            fillTable(this.supplierList);
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Erro ao carregar clientes: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Erro ao carregar fornecedores: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }
@@ -409,17 +409,17 @@ public class CustomerList extends javax.swing.JFrame {
     }
     
     private void onRowSelected() {
-        int selectedRow = customerTable.getSelectedRow();
+        int selectedRow = supplierTable.getSelectedRow();
 
         if (selectedRow != -1) {
-            UUID selectedId = (UUID) customerTable.getValueAt(selectedRow, 0);
+            UUID selectedId = (UUID) supplierTable.getValueAt(selectedRow, 0);
 
-            Customer selectedCustomer = customerController.getCustomers().stream()
-                .filter(customer -> customer.getId().equals(selectedId))
+            Supplier selectedSupplier = supplierController.getSuppliers().stream()
+                .filter(supplier -> supplier.getId().equals(selectedId))
                 .findFirst()
                 .orElse(null);
 
-            if (selectedCustomer != null) {
+            if (selectedSupplier != null) {
                 Address address = addressController.findAddressByAddressableId(selectedId);
                 if (address != null) {
                     fillFormWithAddress(address);
@@ -455,14 +455,30 @@ public class CustomerList extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CustomerList.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SupplierList.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CustomerList.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SupplierList.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CustomerList.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SupplierList.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CustomerList.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SupplierList.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -486,7 +502,7 @@ public class CustomerList extends javax.swing.JFrame {
                 ApplicationContext context = SpringApplication.run(EcommerceApplication.class, args);
 
             java.awt.EventQueue.invokeLater(() -> {
-                CustomerList customerList = context.getBean(CustomerList.class);
+                SupplierList customerList = context.getBean(SupplierList.class);
                 customerList.setVisible(true);
             });
             }
@@ -496,26 +512,27 @@ public class CustomerList extends javax.swing.JFrame {
     @PostConstruct
     private void initData() {
         try {
-            this.customerList = customerController.getCustomers();
-            fillTable(this.customerList);
+            this.supplierList = supplierController.getSuppliers();
+            fillTable(this.supplierList);
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Erro ao carregar clientes: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Erro ao carregar fornecedores: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }
 
-    private void fillTable(List<Customer> list)
+    private void fillTable(List<Supplier> list)
     {  
         DefaultTableModel table = (DefaultTableModel)
-        customerTable.getModel();
-        customerTable.getColumnModel().getColumn(0).setPreferredWidth(180);
-        customerTable.getColumnModel().getColumn(1).setPreferredWidth(180);
-        customerTable.getColumnModel().getColumn(2).setPreferredWidth(180); 
-        customerTable.getColumnModel().getColumn(3).setPreferredWidth(180); 
+        supplierTable.getModel();
+        supplierTable.getColumnModel().getColumn(0).setPreferredWidth(180);
+        supplierTable.getColumnModel().getColumn(1).setPreferredWidth(180);
+        supplierTable.getColumnModel().getColumn(2).setPreferredWidth(180); 
+        supplierTable.getColumnModel().getColumn(3).setPreferredWidth(180);
+        supplierTable.getColumnModel().getColumn(4).setPreferredWidth(180); 
         table.setNumRows(0);
 
-        list.forEach(customerItem -> {
-            table.addRow(new Object[]{customerItem.getId(), customerItem.getName(), customerItem.getEmail(), customerItem.getPhone()});
+        list.forEach(supplierItem -> {
+            table.addRow(new Object[]{supplierItem.getId(), supplierItem.getName(), supplierItem.getCnpj(), supplierItem.getPhone(), supplierItem.getEmail()});
         }); 
     }
 
@@ -524,7 +541,6 @@ public class CustomerList extends javax.swing.JFrame {
     private javax.swing.JTextField cityTxt;
     private javax.swing.JTextField complementTxt;
     private javax.swing.JTextField countryTxt;
-    private javax.swing.JTable customerTable;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -548,5 +564,6 @@ public class CustomerList extends javax.swing.JFrame {
     private javax.swing.JTextField searchTxt;
     private javax.swing.JTextField stateTxt;
     private javax.swing.JTextField streetTxt;
+    private javax.swing.JTable supplierTable;
     // End of variables declaration//GEN-END:variables
 }

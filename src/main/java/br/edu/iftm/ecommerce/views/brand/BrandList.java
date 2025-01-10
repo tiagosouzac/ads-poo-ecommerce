@@ -1,4 +1,4 @@
-package br.edu.iftm.ecommerce.views.brands;
+package br.edu.iftm.ecommerce.views.brand;
 
 import br.edu.iftm.ecommerce.EcommerceApplication;
 import br.edu.iftm.ecommerce.controllers.BrandController;
@@ -243,7 +243,7 @@ public class BrandList extends javax.swing.JFrame {
             this.list = controller.getBrands();
             fillTable(this.list);
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Erro ao atualizar marcas: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Erro ao carregar marcas: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }

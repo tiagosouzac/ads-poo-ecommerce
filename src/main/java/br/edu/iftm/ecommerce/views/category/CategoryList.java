@@ -314,7 +314,7 @@ public class CategoryList extends javax.swing.JFrame {
             this.list = controller.getCategories();
             fillTable(this.list);
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Erro ao atualizar marcas: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Erro ao carregar categorias: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }

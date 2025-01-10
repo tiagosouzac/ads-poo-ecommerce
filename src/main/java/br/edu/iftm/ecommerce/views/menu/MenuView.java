@@ -1,11 +1,13 @@
 package br.edu.iftm.ecommerce.views.menu;
 
-import br.edu.iftm.ecommerce.views.brands.BrandList;
-import br.edu.iftm.ecommerce.views.brands.BrandRegister;
+import br.edu.iftm.ecommerce.views.brand.BrandList;
+import br.edu.iftm.ecommerce.views.brand.BrandRegister;
 import br.edu.iftm.ecommerce.views.category.CategoryList;
 import br.edu.iftm.ecommerce.views.category.CategoryRegister;
 import br.edu.iftm.ecommerce.views.customer.CustomerList;
 import br.edu.iftm.ecommerce.views.customer.CustomerRegister;
+import br.edu.iftm.ecommerce.views.supplier.SupplierList;
+import br.edu.iftm.ecommerce.views.supplier.SupplierRegister;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -29,6 +31,12 @@ public class MenuView extends javax.swing.JFrame {
     
     @Autowired
     BrandList brandList;
+    
+    @Autowired
+    SupplierRegister supplierRegister;
+    
+    @Autowired
+    SupplierList supplierList;
 
     
     /**
@@ -102,6 +110,11 @@ public class MenuView extends javax.swing.JFrame {
         jMenuCadastro.add(jMenuItem1);
 
         jMenuItem2.setText("Cadastro Fornecedor");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
         jMenuCadastro.add(jMenuItem2);
 
         jMenuItem3.setText("Cadastro Marca");
@@ -136,6 +149,11 @@ public class MenuView extends javax.swing.JFrame {
         jMenuListagem.add(jMenuItem6);
 
         jMenuItem7.setText("Lista Fornecedores");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
         jMenuListagem.add(jMenuItem7);
 
         jMenuItem8.setText("Lista Marcas");
@@ -205,6 +223,16 @@ public class MenuView extends javax.swing.JFrame {
         brandList.setVisible(true);
         dispose();
     }//GEN-LAST:event_jMenuItem8ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        supplierRegister.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        supplierList.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     /**
      * @param args the command line arguments

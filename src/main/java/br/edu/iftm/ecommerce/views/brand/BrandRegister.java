@@ -1,4 +1,4 @@
-package br.edu.iftm.ecommerce.views.brands;
+package br.edu.iftm.ecommerce.views.brand;
 
 import br.edu.iftm.ecommerce.EcommerceApplication;
 import br.edu.iftm.ecommerce.controllers.BrandController;

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 public class AddressController {
@@ -32,5 +33,9 @@ public class AddressController {
 
     public void deleteAddress(Address address) {
         this.deleteAddressStrategy.execute(address, addressRepository);
+    }
+    
+    public Address findAddressByAddressableId(UUID addressableId){
+        return this.addressRepository.findByAddressableId(addressableId);
     }
 }
