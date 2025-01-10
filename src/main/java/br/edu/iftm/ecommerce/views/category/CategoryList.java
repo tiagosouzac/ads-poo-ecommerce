@@ -1,7 +1,9 @@
-package br.edu.iftm.ecommerce.views.categoria;
+package br.edu.iftm.ecommerce.views.category;
 
+import br.edu.iftm.ecommerce.EcommerceApplication;
 import br.edu.iftm.ecommerce.controllers.CategoryController;
 import br.edu.iftm.ecommerce.models.Category;
+import br.edu.iftm.ecommerce.views.menu.MenuView;
 import jakarta.annotation.PostConstruct;
 import java.util.List;
 import java.util.UUID;
@@ -11,6 +13,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -19,11 +23,13 @@ public class CategoryList extends javax.swing.JFrame {
     @Autowired
     private CategoryController controller;
     private List<Category> list;
+    
+    private final ApplicationContext context;
 
     /**
      * Creates new form RegisterCategory
      */
-    public CategoryList() {
+    public CategoryList(ApplicationContext context) {
         initComponents();
         categoryTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
         @Override
@@ -33,6 +39,7 @@ public class CategoryList extends javax.swing.JFrame {
             }
         }
     });
+        this.context = context;
     }
 
     /**
@@ -61,6 +68,7 @@ public class CategoryList extends javax.swing.JFrame {
         nameTxt = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        menuButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -205,6 +213,16 @@ public class CategoryList extends javax.swing.JFrame {
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setText("Detalhes da categoria selecionada");
 
+        menuButton.setBackground(new java.awt.Color(102, 0, 51));
+        menuButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        menuButton.setForeground(new java.awt.Color(255, 255, 255));
+        menuButton.setText("Voltar ao Menu");
+        menuButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -218,6 +236,10 @@ public class CategoryList extends javax.swing.JFrame {
                     .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(67, 67, 67)
+                .addComponent(menuButton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addGap(2, 2, 2)
@@ -234,7 +256,9 @@ public class CategoryList extends javax.swing.JFrame {
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(66, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(menuButton)
+                .addContainerGap(21, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addGap(285, 285, 285)
@@ -254,6 +278,7 @@ public class CategoryList extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void searchAndUpdateTable() {
@@ -277,6 +302,12 @@ public class CategoryList extends javax.swing.JFrame {
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
         searchAndUpdateTable();
     }//GEN-LAST:event_searchButtonActionPerformed
+
+    private void menuButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButtonActionPerformed
+       MenuView menuView = context.getBean(MenuView.class);
+       menuView.setVisible(true);
+       dispose();
+    }//GEN-LAST:event_menuButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -311,7 +342,12 @@ public class CategoryList extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CategoryList().setVisible(true);
+                ApplicationContext context = SpringApplication.run(EcommerceApplication.class, args);
+
+            java.awt.EventQueue.invokeLater(() -> {
+                CategoryList categoryList = context.getBean(CategoryList.class);
+                categoryList.setVisible(true);
+            });
             }
         });
     }
@@ -380,6 +416,7 @@ public class CategoryList extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JButton menuButton;
     private javax.swing.JTextField nameTxt;
     private javax.swing.JButton searchButton;
     private javax.swing.JTextField searchTxt;

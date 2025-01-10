@@ -10,8 +10,6 @@ import java.util.UUID;
 @Table(name = "categories")
 @AllArgsConstructor
 @NoArgsConstructor
-//@Getter
-//@Setter
 @Builder
 public class Category {
     @Id
@@ -50,7 +48,4 @@ public class Category {
     public void setDescription(String description) {
         this.description = description;
     }
-    
-    
-    
 }

@@ -1,6 +1,6 @@
 package br.edu.iftm.ecommerce;
 
-import br.edu.iftm.ecommerce.views.categoria.CategoryRegister;
+import br.edu.iftm.ecommerce.views.category.CategoryRegister;
 import br.edu.iftm.ecommerce.views.menu.MenuView;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

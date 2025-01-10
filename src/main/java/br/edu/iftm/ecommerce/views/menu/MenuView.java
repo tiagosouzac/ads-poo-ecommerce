@@ -1,7 +1,9 @@
 package br.edu.iftm.ecommerce.views.menu;
 
-import br.edu.iftm.ecommerce.views.categoria.CategoryList;
-import br.edu.iftm.ecommerce.views.categoria.CategoryRegister;
+import br.edu.iftm.ecommerce.views.category.CategoryList;
+import br.edu.iftm.ecommerce.views.category.CategoryRegister;
+import br.edu.iftm.ecommerce.views.customer.CustomerList;
+import br.edu.iftm.ecommerce.views.customer.CustomerRegister;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +15,12 @@ public class MenuView extends javax.swing.JFrame {
     
     @Autowired
     private CategoryList categoryList;
+    
+    @Autowired
+    CustomerRegister customerRegister;
+    
+    @Autowired
+    CustomerList customerList;
 
     
     /**
@@ -91,6 +99,11 @@ public class MenuView extends javax.swing.JFrame {
         jMenuCadastro.add(jMenuItem3);
 
         jMenuItem4.setText("Cadastro Cliente");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
         jMenuCadastro.add(jMenuItem4);
 
         jMenuBar1.add(jMenuCadastro);
@@ -115,6 +128,11 @@ public class MenuView extends javax.swing.JFrame {
         jMenuListagem.add(jMenuItem8);
 
         jMenuItem9.setText("Lista Clientes");
+        jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem9ActionPerformed(evt);
+            }
+        });
         jMenuListagem.add(jMenuItem9);
 
         jMenuBar1.add(jMenuListagem);
@@ -136,15 +154,28 @@ public class MenuView extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemActionPerformed
         categoryRegister.setVisible(true);
+        dispose();
     }//GEN-LAST:event_jMenuItemActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         categoryList.setVisible(true);
+        dispose();
     }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        customerRegister.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
+        customerList.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jMenuItem9ActionPerformed
 
     /**
      * @param args the command line arguments

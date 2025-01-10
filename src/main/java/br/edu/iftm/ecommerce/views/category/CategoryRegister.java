@@ -1,9 +1,13 @@
-package br.edu.iftm.ecommerce.views.categoria;
+package br.edu.iftm.ecommerce.views.category;
 
+import br.edu.iftm.ecommerce.EcommerceApplication;
 import br.edu.iftm.ecommerce.controllers.CategoryController;
 import br.edu.iftm.ecommerce.models.Category;
+import br.edu.iftm.ecommerce.views.menu.MenuView;
 import javax.swing.JOptionPane;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,11 +16,16 @@ public class CategoryRegister extends javax.swing.JFrame {
     @Autowired
     private CategoryController controller;
     
+    private final ApplicationContext context;
+    
     /**
      * Creates new form RegisterCategory
      */
-    public CategoryRegister() {
+    
+    @Autowired
+    public CategoryRegister(ApplicationContext context) {
         initComponents();
+        this.context = context;
     }
 
     /**
@@ -38,6 +47,7 @@ public class CategoryRegister extends javax.swing.JFrame {
         descriptionTxt = new javax.swing.JTextArea();
         nameTxt = new javax.swing.JTextField();
         saveButton = new javax.swing.JButton();
+        menuButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -126,6 +136,16 @@ public class CategoryRegister extends javax.swing.JFrame {
                 .addContainerGap(57, Short.MAX_VALUE))
         );
 
+        menuButton.setBackground(new java.awt.Color(102, 0, 51));
+        menuButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        menuButton.setForeground(new java.awt.Color(255, 255, 255));
+        menuButton.setText("Voltar ao Menu");
+        menuButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -135,6 +155,10 @@ public class CategoryRegister extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(84, 84, 84)
+                .addComponent(menuButton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -142,7 +166,9 @@ public class CategoryRegister extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 98, Short.MAX_VALUE))
+                .addGap(32, 32, 32)
+                .addComponent(menuButton)
+                .addContainerGap(39, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -157,6 +183,7 @@ public class CategoryRegister extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
     
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
@@ -180,6 +207,12 @@ public class CategoryRegister extends javax.swing.JFrame {
             System.out.println(ex);
         }
     }//GEN-LAST:event_saveButtonActionPerformed
+
+    private void menuButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButtonActionPerformed
+        MenuView menuView = context.getBean(MenuView.class);
+        menuView.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_menuButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -212,7 +245,12 @@ public class CategoryRegister extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CategoryRegister().setVisible(true);
+            ApplicationContext context = SpringApplication.run(EcommerceApplication.class, args);
+
+            java.awt.EventQueue.invokeLater(() -> {
+                CategoryRegister categoryRegister = context.getBean(CategoryRegister.class);
+                categoryRegister.setVisible(true);
+            });
             }
         });
     }
@@ -226,6 +264,7 @@ public class CategoryRegister extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton menuButton;
     private javax.swing.JTextField nameTxt;
     private javax.swing.JButton saveButton;
     // End of variables declaration//GEN-END:variables
