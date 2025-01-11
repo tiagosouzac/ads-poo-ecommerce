@@ -1,16 +1,12 @@
 package br.edu.iftm.ecommerce.models;
 
 import jakarta.persistence.*;
-import lombok.*;
 
 import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Table(name = "categories")
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -47,5 +43,42 @@ public class Category {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
+    public static class CategoryBuilder {
+        private String name;
+        private String description;
+        private List<Product> products;
+
+        public CategoryBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public CategoryBuilder description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public CategoryBuilder products(List<Product> products) {
+            this.products = products;
+            return this;
+        }
+
+        public Category build() {
+            Category category = new Category();
+            category.setName(this.name);
+            category.setDescription(this.description);
+            category.setProducts(this.products);
+            return category;
+        }
     }
 }

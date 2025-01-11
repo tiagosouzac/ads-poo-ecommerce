@@ -1,16 +1,12 @@
 package br.edu.iftm.ecommerce.models;
 
 import jakarta.persistence.*;
-import lombok.*;
 
 import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Table(name = "brands")
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 public class Brand {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -78,4 +74,48 @@ public class Brand {
     public void setProducts(List<Product> products) {
         this.products = products;
     }
+
+    public static class BrandBuilder {
+        private String name;
+        private String website;
+        private String email;
+        private String phone;
+        private List<Product> products;
+
+        public BrandBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public BrandBuilder website(String website) {
+            this.website = website;
+            return this;
+        }
+
+        public BrandBuilder email(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public BrandBuilder phone(String phone) {
+            this.phone = phone;
+            return this;
+        }
+
+        public BrandBuilder products(List<Product> products) {
+            this.products = products;
+            return this;
+        }
+
+        public Brand build() {
+            Brand brand = new Brand();
+            brand.setName(this.name);
+            brand.setWebsite(this.website);
+            brand.setEmail(this.email);
+            brand.setPhone(this.phone);
+            brand.setProducts(this.products);
+            return brand;
+        }
+    }
+
 }
