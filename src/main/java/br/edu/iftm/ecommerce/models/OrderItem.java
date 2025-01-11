@@ -88,7 +88,7 @@ public class OrderItem {
         this.order = order;
     }
 
-    public static class OrderItemBuilder {
+    public class OrderItemBuilder {
         private Integer quantity;
         private BigDecimal discount;
         private BigDecimal subtotal;

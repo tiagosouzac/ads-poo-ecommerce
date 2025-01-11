@@ -77,7 +77,7 @@ public class Supplier extends Addressable {
         this.products = products;
     }
 
-    public static class SupplierBuilder {
+    public class SupplierBuilder {
         private String name;
         private String cnpj;
         private String phone;

@@ -53,7 +53,7 @@ public class Category {
         this.products = products;
     }
 
-    public static class CategoryBuilder {
+    public class CategoryBuilder {
         private String name;
         private String description;
         private List<Product> products;

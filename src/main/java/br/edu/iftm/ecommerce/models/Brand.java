@@ -75,7 +75,7 @@ public class Brand {
         this.products = products;
     }
 
-    public static class BrandBuilder {
+    public class BrandBuilder {
         private String name;
         private String website;
         private String email;

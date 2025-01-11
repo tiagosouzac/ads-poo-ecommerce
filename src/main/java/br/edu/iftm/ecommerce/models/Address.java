@@ -118,7 +118,7 @@ public class Address {
         this.addressable = addressable;
     }
 
-    public static class AddressBuilder {
+    public class AddressBuilder {
         private String street;
         private String number;
         private String neighborhood;

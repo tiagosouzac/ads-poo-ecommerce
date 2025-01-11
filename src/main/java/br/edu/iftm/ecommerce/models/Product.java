@@ -100,7 +100,7 @@ public class Product {
         this.supplier = supplier;
     }
 
-    public static class ProductBuilder {
+    public class ProductBuilder {
         private String name;
         private String description;
         private BigDecimal price;

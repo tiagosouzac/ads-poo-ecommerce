@@ -78,7 +78,7 @@ public class Payment {
         this.customer = customer;
     }
 
-    public static class PaymentBuilder {
+    public class PaymentBuilder {
         private PaymentType type;
         private PaymentStatus status;
         private String transactionCode;

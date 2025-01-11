@@ -77,7 +77,7 @@ public class Customer extends Addressable {
         this.payments = payments;
     }
 
-    public static class CustomerBuilder {
+    public class CustomerBuilder {
         private String name;
         private String email;
         private String phone;

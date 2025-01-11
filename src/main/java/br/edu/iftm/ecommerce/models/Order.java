@@ -100,7 +100,7 @@ public class Order {
         this.payment = payment;
     }
 
-    public static class OrderBuilder {
+    public class OrderBuilder {
         private BigDecimal discount;
         private BigDecimal subtotal;
         private BigDecimal total;
