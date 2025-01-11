@@ -6,6 +6,7 @@ import br.edu.iftm.ecommerce.views.category.CategoryList;
 import br.edu.iftm.ecommerce.views.category.CategoryRegister;
 import br.edu.iftm.ecommerce.views.customer.CustomerList;
 import br.edu.iftm.ecommerce.views.customer.CustomerRegister;
+import br.edu.iftm.ecommerce.views.order.OrderRegister;
 import br.edu.iftm.ecommerce.views.product.ProductList;
 import br.edu.iftm.ecommerce.views.product.ProductRegister;
 import br.edu.iftm.ecommerce.views.supplier.SupplierList;
@@ -45,6 +46,9 @@ public class MenuView extends javax.swing.JFrame {
     
     @Autowired
     ProductList productList;
+    
+    @Autowired
+    OrderRegister orderRegister;
 
     
     /**
@@ -79,6 +83,7 @@ public class MenuView extends javax.swing.JFrame {
         jMenuItem8 = new javax.swing.JMenuItem();
         jMenuItem9 = new javax.swing.JMenuItem();
         jMenuVenda = new javax.swing.JMenu();
+        jMenuItem10 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -193,6 +198,15 @@ public class MenuView extends javax.swing.JFrame {
         jMenuBar1.add(jMenuListagem);
 
         jMenuVenda.setText("Venda");
+
+        jMenuItem10.setText("Realizar Venda");
+        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem10ActionPerformed(evt);
+            }
+        });
+        jMenuVenda.add(jMenuItem10);
+
         jMenuBar1.add(jMenuVenda);
 
         setJMenuBar(jMenuBar1);
@@ -262,6 +276,11 @@ public class MenuView extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
+    private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
+        orderRegister.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jMenuItem10ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -303,6 +322,7 @@ public class MenuView extends javax.swing.JFrame {
     private javax.swing.JMenu jMenuCadastro;
     private javax.swing.JMenuItem jMenuItem;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem10;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;

@@ -451,13 +451,13 @@ public class ProductRegister extends javax.swing.JFrame {
             String strDescription = descriptionTxt.getText().trim();
             String strPrice = priceTxt.getText().trim();
             String strStock = stockTxt.getText().trim();
-
+            
             int selectedCategoryIndex = categoryCmb.getSelectedIndex();
             int selectedBrandIndex = brandCmb.getSelectedIndex();
             int selectedSupplierIndex = supplierCmb.getSelectedIndex();
 
             if (strName.isEmpty() || strDescription.isEmpty() || strPrice.isEmpty() || strStock.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Preencha todos os campos obrigatórios.", "Erro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Preencha todos os campos.", "Erro", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -483,7 +483,7 @@ public class ProductRegister extends javax.swing.JFrame {
             BigDecimal price = new BigDecimal(strPrice);
             int stock = Integer.parseInt(strStock);
 
-            Product product = new Product();
+            Product product = Product.builder().name(strName).build();
             product.setName(strName);
             product.setDescription(strDescription);
             product.setPrice(price);
