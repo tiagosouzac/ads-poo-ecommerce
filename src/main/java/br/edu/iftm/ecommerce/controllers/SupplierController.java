@@ -1,9 +1,7 @@
 package br.edu.iftm.ecommerce.controllers;
 
 import br.edu.iftm.ecommerce.models.Supplier;
-import br.edu.iftm.ecommerce.repositories.SupplierRepository;
-import br.edu.iftm.ecommerce.strategies.supplier.DeleteSupplierStrategy;
-import br.edu.iftm.ecommerce.strategies.supplier.SaveSupplierStrategy;
+import br.edu.iftm.ecommerce.services.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -11,26 +9,18 @@ import java.util.List;
 
 @Controller
 public class SupplierController {
-    private final SupplierRepository supplierRepository;
-    private final SaveSupplierStrategy saveSuppilerStrategy;
-    private final DeleteSupplierStrategy deleteSuppilerStrategy;
-
     @Autowired
-    public SupplierController(SupplierRepository supplierRepository) {
-        this.supplierRepository = supplierRepository;
-        this.saveSuppilerStrategy = new SaveSupplierStrategy();
-        this.deleteSuppilerStrategy = new DeleteSupplierStrategy();
-    }
+    private SupplierService supplierService;
 
     public List<Supplier> getSuppliers() {
-        return this.supplierRepository.findAll();
+        return this.supplierService.findAll();
     }
 
     public void saveSupplier(Supplier supplier) {
-        this.saveSuppilerStrategy.execute(supplier, this.supplierRepository);
+        this.supplierService.save(supplier);
     }
 
     public void deleteSupplier(Supplier supplier) {
-        this.deleteSuppilerStrategy.execute(supplier, this.supplierRepository);
+        this.supplierService.delete(supplier);
     }
 }
