@@ -8,6 +8,7 @@ import br.edu.iftm.ecommerce.models.OrderItem;
 import br.edu.iftm.ecommerce.models.Product;
 import br.edu.iftm.ecommerce.views.menu.MenuView;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +19,8 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -48,7 +51,8 @@ public class OrderRegister extends javax.swing.JFrame {
         setupCustomerAutocomplete();
         setupProductAutocomplete();
         disableSpecificTextFields();
-        setupItemTotalCalculation(); 
+        setupItemTotalCalculation();
+        setupOrderDiscountListener();
     }
 
     /**
@@ -95,22 +99,14 @@ public class OrderRegister extends javax.swing.JFrame {
         jPanel6 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
-        òrderDiscountTxt = new javax.swing.JTextField();
+        orderDiscountTxt = new javax.swing.JTextField();
         jLabel19 = new javax.swing.JLabel();
         orderSubtotalTxt = new javax.swing.JTextField();
         jLabel20 = new javax.swing.JLabel();
         orderTotalTxt = new javax.swing.JTextField();
         jLabel21 = new javax.swing.JLabel();
-        jPanel7 = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
         jPanel9 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
-        jLabel22 = new javax.swing.JLabel();
-        jLabel23 = new javax.swing.JLabel();
-        jLabel24 = new javax.swing.JLabel();
-        shippedAtTxt = new javax.swing.JFormattedTextField();
-        deliveredAtTxt = new javax.swing.JFormattedTextField();
-        estimatedArrivalTxt = new javax.swing.JFormattedTextField();
         orderStatusCmb = new javax.swing.JComboBox<>();
         jLabel25 = new javax.swing.JLabel();
         transactionCodeTxt = new javax.swing.JTextField();
@@ -118,8 +114,7 @@ public class OrderRegister extends javax.swing.JFrame {
         jLabel27 = new javax.swing.JLabel();
         typeTxt = new javax.swing.JComboBox<>();
         paymentStatusCmb = new javax.swing.JComboBox<>();
-        jPanel10 = new javax.swing.JPanel();
-        addButton1 = new javax.swing.JButton();
+        deleteButton = new javax.swing.JButton();
         menuButton = new javax.swing.JButton();
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
@@ -256,7 +251,7 @@ public class OrderRegister extends javax.swing.JFrame {
                 {null, null, null, null, null}
             },
             new String [] {
-                "Nome", "Quantidade", "Subtotal", "Desconto", "Total"
+                "Nome", "Quantidade", "Desconto", "Valor Item", "Total"
             }
         ));
         jScrollPane1.setViewportView(orderItemTable);
@@ -308,7 +303,7 @@ public class OrderRegister extends javax.swing.JFrame {
         jLabel18.setForeground(new java.awt.Color(255, 255, 255));
         jLabel18.setText("Desconto:");
 
-        òrderDiscountTxt.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        orderDiscountTxt.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
 
         jLabel19.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel19.setForeground(new java.awt.Color(255, 255, 255));
@@ -326,25 +321,6 @@ public class OrderRegister extends javax.swing.JFrame {
         jLabel21.setForeground(new java.awt.Color(255, 255, 255));
         jLabel21.setText("Total:");
 
-        jPanel7.setBackground(new java.awt.Color(102, 102, 102));
-        jPanel7.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-
-        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel7.setText("Envio");
-
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE)
-        );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel7)
-        );
-
         jPanel9.setBackground(new java.awt.Color(102, 102, 102));
         jPanel9.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
@@ -357,37 +333,12 @@ public class OrderRegister extends javax.swing.JFrame {
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel8)
         );
-
-        jLabel22.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel22.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel22.setText("Data de envio:");
-
-        jLabel23.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel23.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel23.setText("Data de entrega:");
-
-        jLabel24.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel24.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel24.setText("Data estimada de entrega:");
-
-        shippedAtTxt.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
-
-        deliveredAtTxt.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
-        deliveredAtTxt.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deliveredAtTxtActionPerformed(evt);
-            }
-        });
-
-        estimatedArrivalTxt.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
 
         orderStatusCmb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -409,27 +360,13 @@ public class OrderRegister extends javax.swing.JFrame {
 
         paymentStatusCmb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jPanel10.setBackground(new java.awt.Color(102, 102, 102));
-        jPanel10.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-
-        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
-        jPanel10.setLayout(jPanel10Layout);
-        jPanel10Layout.setHorizontalGroup(
-            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 8, Short.MAX_VALUE)
-        );
-        jPanel10Layout.setVerticalGroup(
-            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        addButton1.setBackground(new java.awt.Color(255, 0, 51));
-        addButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        addButton1.setForeground(new java.awt.Color(255, 255, 255));
-        addButton1.setText("Excluir");
-        addButton1.addActionListener(new java.awt.event.ActionListener() {
+        deleteButton.setBackground(new java.awt.Color(255, 0, 51));
+        deleteButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        deleteButton.setForeground(new java.awt.Color(255, 255, 255));
+        deleteButton.setText("Excluir");
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addButton1ActionPerformed(evt);
+                deleteButtonActionPerformed(evt);
             }
         });
 
@@ -438,7 +375,7 @@ public class OrderRegister extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addGap(0, 52, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -464,7 +401,7 @@ public class OrderRegister extends javax.swing.JFrame {
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(addButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(itemDiscountTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -480,36 +417,7 @@ public class OrderRegister extends javax.swing.JFrame {
                     .addComponent(jPanel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel23)
-                            .addComponent(jLabel24)
-                            .addComponent(jLabel22))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(shippedAtTxt, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
-                            .addComponent(deliveredAtTxt)
-                            .addComponent(estimatedArrivalTxt))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel26)
-                            .addComponent(jLabel25)
-                            .addComponent(jLabel27))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(transactionCodeTxt, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-                            .addComponent(paymentStatusCmb, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(typeTxt, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(100, 100, 100))))
+            .addComponent(jPanel9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(saveButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -537,7 +445,7 @@ public class OrderRegister extends javax.swing.JFrame {
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(jLabel18)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(òrderDiscountTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(orderDiscountTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(26, 26, 26)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
@@ -547,7 +455,18 @@ public class OrderRegister extends javax.swing.JFrame {
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(jLabel21)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(orderTotalTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(orderTotalTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(249, 249, 249)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel26)
+                            .addComponent(jLabel25)
+                            .addComponent(jLabel27))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(transactionCodeTxt)
+                            .addComponent(paymentStatusCmb, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(typeTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -588,14 +507,14 @@ public class OrderRegister extends javax.swing.JFrame {
                 .addGap(22, 22, 22)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addButton)
-                    .addComponent(addButton1))
+                    .addComponent(deleteButton))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(òrderDiscountTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(orderDiscountTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel18)
                     .addComponent(jLabel19)
                     .addComponent(orderSubtotalTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -606,30 +525,19 @@ public class OrderRegister extends javax.swing.JFrame {
                     .addComponent(jLabel21)
                     .addComponent(orderStatusCmb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel22)
-                            .addComponent(shippedAtTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel25)
-                            .addComponent(typeTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel23)
-                            .addComponent(deliveredAtTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel26)
-                            .addComponent(paymentStatusCmb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel24)
-                            .addComponent(estimatedArrivalTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel27)
-                            .addComponent(transactionCodeTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel25)
+                    .addComponent(typeTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel26)
+                    .addComponent(paymentStatusCmb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel27)
+                    .addComponent(transactionCodeTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(saveButton1)
                 .addContainerGap(18, Short.MAX_VALUE))
@@ -692,14 +600,14 @@ public class OrderRegister extends javax.swing.JFrame {
             String strDiscount = itemDiscountTxt.getText().trim();
             String strPrice = itemPriceTxt.getText().trim();
             String strTotal = itemTotalTxt.getText().trim();
-            
+
             if (selectedProductIndex == -1) {
                 JOptionPane.showMessageDialog(this, "Selecione um produto.", "Erro", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            
-            if (strQuantity.isEmpty() || strDiscount.isEmpty() || strPrice.isEmpty() || strTotal.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Preencha todos os campos.", "Erro", JOptionPane.ERROR_MESSAGE);
+
+            if (strQuantity.isEmpty() || strPrice.isEmpty() || strTotal.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Preencha todos os campos, exceto o de Desconto, que é opcional.", "Erro", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -709,11 +617,40 @@ public class OrderRegister extends javax.swing.JFrame {
                     .filter(c -> c.getId().equals(selectedProductId))
                     .findFirst().orElse(null);
 
-            int quantity = Integer.parseInt(quantityTxt.getText());
-            BigDecimal price = new BigDecimal(strDiscount);
-            BigDecimal discount = new BigDecimal(strPrice);
-            BigDecimal total = new BigDecimal(strTotal);
-                    
+            int quantity = 0;
+            try {
+                quantity = Integer.parseInt(strQuantity);
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Quantidade inválida.", "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            BigDecimal price = BigDecimal.ZERO;
+            try {
+                price = new BigDecimal(strPrice);
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Preço inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            BigDecimal discount = BigDecimal.ZERO;
+            if (!strDiscount.isEmpty()) {
+                try {
+                    discount = new BigDecimal(strDiscount);
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(this, "Desconto do Produto inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+
+            BigDecimal total = BigDecimal.ZERO;
+            try {
+                total = new BigDecimal(strTotal);
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Total do Produto inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             OrderItem orderItem = new OrderItem();
             orderItem.setProduct(selectedProduct);
             orderItem.setQuantity(quantity);
@@ -722,8 +659,10 @@ public class OrderRegister extends javax.swing.JFrame {
             orderItem.setTotal(total);
 
             selectedOrderItems.add(orderItem);
-            
+
             fillTable(selectedOrderItems);
+            getSubTotalOrderValue();
+            getOrderTotalValue();
 
             JOptionPane.showMessageDialog(this, "Produto adicionado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
 
@@ -815,7 +754,7 @@ public class OrderRegister extends javax.swing.JFrame {
                 itemTotalTxt.setText(itemTotal.toString());
             }
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Campos Quantidade ou Desconto são inválidos.", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Campos Quantidade ou Desconto de Produto são inválidos.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
     
@@ -900,8 +839,73 @@ public class OrderRegister extends javax.swing.JFrame {
         table.setNumRows(0);
 
         selectedOrderList.forEach(orderItem -> {
-            table.addRow(new Object[]{orderItem.getProduct().getName(), orderItem.getQuantity(), orderItem.getSubtotal(), orderItem.getDiscount(), orderItem.getTotal()});
+            table.addRow(new Object[]{orderItem.getProduct().getName(), orderItem.getQuantity(), orderItem.getDiscount(), orderItem.getSubtotal(), orderItem.getTotal()});
         }); 
+    }
+    
+    private void getSubTotalOrderValue() {
+        BigDecimal subTotal = BigDecimal.ZERO;
+
+        for (OrderItem orderItem : selectedOrderItems) {
+            BigDecimal itemTotal = orderItem.getTotal();
+            subTotal = subTotal.add(itemTotal);
+        }
+        orderSubtotalTxt.setText(subTotal.setScale(2, RoundingMode.HALF_UP).toString());
+    }
+    
+    private void getOrderTotalValue() {
+    try {
+        BigDecimal subTotal = new BigDecimal(orderSubtotalTxt.getText());
+            BigDecimal discount = BigDecimal.ZERO;
+
+            if (!orderDiscountTxt.getText().isEmpty()) {
+                discount = new BigDecimal(orderDiscountTxt.getText());
+            }
+
+            BigDecimal total = subTotal.subtract(discount);
+            orderTotalTxt.setText(total.setScale(2, RoundingMode.HALF_UP).toString());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Desconto de Venda inválido. Por favor, insira um valor numérico.", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void setupOrderDiscountListener() {
+        orderDiscountTxt.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateOrderTotal();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateOrderTotal();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateOrderTotal();
+            }
+        });
+    }
+
+    private void updateOrderTotal() {
+        try {
+            BigDecimal subTotal = new BigDecimal(orderSubtotalTxt.getText());
+            BigDecimal discount = BigDecimal.ZERO;
+
+            if (!orderDiscountTxt.getText().isEmpty()) {
+                discount = new BigDecimal(orderDiscountTxt.getText());
+            }
+
+            BigDecimal total = subTotal.subtract(discount);
+            orderTotalTxt.setText(total.setScale(2, RoundingMode.HALF_UP).toString());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Valor inválido para desconto. Insira um número válido.", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public void setupListeners() {
+        setupOrderDiscountListener();
     }
     
     private void menuButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButtonActionPerformed
@@ -918,13 +922,26 @@ public class OrderRegister extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_saveButton1ActionPerformed
 
-    private void deliveredAtTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deliveredAtTxtActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_deliveredAtTxtActionPerformed
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
+        int selectedRow = orderItemTable.getSelectedRow();
 
-    private void addButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_addButton1ActionPerformed
+        if (selectedRow >= 0) {
+            OrderItem selectedOrderItem = selectedOrderItems.get(selectedRow);
+            BigDecimal itemTotal = selectedOrderItem.getTotal();
+
+            selectedOrderItems.remove(selectedOrderItem);
+
+            fillTable(selectedOrderItems);
+
+            BigDecimal currentSubtotal = new BigDecimal(orderSubtotalTxt.getText());
+            BigDecimal newSubtotal = currentSubtotal.subtract(itemTotal);
+            orderSubtotalTxt.setText(newSubtotal.setScale(2, RoundingMode.HALF_UP).toString());
+            getOrderTotalValue();
+            JOptionPane.showMessageDialog(null, "Produto removido com sucesso!");
+        } else {
+            JOptionPane.showMessageDialog(null, "Nenhum produto selecionado para remoção.");
+        }
+    }//GEN-LAST:event_deleteButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -999,11 +1016,9 @@ public class OrderRegister extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
-    private javax.swing.JButton addButton1;
     private javax.swing.JComboBox<String> customerCmb;
     private javax.swing.JTextField customerTxt;
-    private javax.swing.JFormattedTextField deliveredAtTxt;
-    private javax.swing.JFormattedTextField estimatedArrivalTxt;
+    private javax.swing.JButton deleteButton;
     private javax.swing.JTextField itemDiscountTxt;
     private javax.swing.JTextField itemPriceTxt;
     private javax.swing.JTextField itemTotalTxt;
@@ -1020,9 +1035,6 @@ public class OrderRegister extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
-    private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
@@ -1030,21 +1042,19 @@ public class OrderRegister extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JButton menuButton;
+    private javax.swing.JTextField orderDiscountTxt;
     private javax.swing.JTable orderItemTable;
     private javax.swing.JComboBox<String> orderStatusCmb;
     private javax.swing.JTextField orderSubtotalTxt;
@@ -1054,9 +1064,7 @@ public class OrderRegister extends javax.swing.JFrame {
     private javax.swing.JTextField productTxt;
     private javax.swing.JTextField quantityTxt;
     private javax.swing.JButton saveButton1;
-    private javax.swing.JFormattedTextField shippedAtTxt;
     private javax.swing.JTextField transactionCodeTxt;
     private javax.swing.JComboBox<String> typeTxt;
-    private javax.swing.JTextField òrderDiscountTxt;
     // End of variables declaration//GEN-END:variables
 }

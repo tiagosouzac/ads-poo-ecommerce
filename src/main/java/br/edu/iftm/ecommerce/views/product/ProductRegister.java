@@ -1,6 +1,7 @@
 package br.edu.iftm.ecommerce.views.product;
 
 import br.edu.iftm.ecommerce.EcommerceApplication;
+import br.edu.iftm.ecommerce.builders.ProductBuilder;
 import br.edu.iftm.ecommerce.controllers.BrandController;
 import br.edu.iftm.ecommerce.controllers.CategoryController;
 import br.edu.iftm.ecommerce.controllers.ProductController;
@@ -482,15 +483,14 @@ public class ProductRegister extends javax.swing.JFrame {
 
             BigDecimal price = new BigDecimal(strPrice);
             int stock = Integer.parseInt(strStock);
-
-            Product product = Product.builder().name(strName).build();
-            product.setName(strName);
-            product.setDescription(strDescription);
-            product.setPrice(price);
-            product.setStock(stock);
-            product.setCategory(selectedCategory);
-            product.setBrand(selectedBrand);
-            product.setSupplier(selectedSupplier);
+            Product product = new ProductBuilder()
+                    .name(strName)
+                    .description(strDescription)
+                    .price(price)
+                    .stock(stock)
+                    .category(selectedCategory)
+                    .brand(selectedBrand)
+                    .supplier(selectedSupplier).build();
 
             productController.saveProduct(product);
 
