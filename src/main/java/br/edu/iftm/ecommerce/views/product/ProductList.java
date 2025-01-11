@@ -329,6 +329,8 @@ public class ProductList extends javax.swing.JFrame {
             filteredList = productController.searchProductsByBrandName(searchText);
         } else if (categoryRadioBtn.isSelected()) {
             filteredList = productController.searchProductsByCategoryName(searchText);
+        } else if(nameRadioBtn.isSelected()){
+            filteredList = productController.searchProductsByName(searchText);
         }
 
         fillTable(filteredList);

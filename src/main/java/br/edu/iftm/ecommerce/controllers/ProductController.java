@@ -45,4 +45,8 @@ public class ProductController {
     public List<Product> searchProductsBySupplierName(String supplierName) {
         return this.productRepository.findBySupplierNameContainingIgnoreCase(supplierName);
     }
+    
+    public List<Product> searchProductsByName(String name) {
+        return this.productRepository.findByNameContainingIgnoreCase(name);
+    }
 }
