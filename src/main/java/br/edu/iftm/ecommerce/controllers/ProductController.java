@@ -33,4 +33,16 @@ public class ProductController {
     public void deleteProduct(Product product) {
         this.deleteProductStrategy.execute(product, this.productRepository);
     }
+    
+    public List<Product> searchProductsByCategoryName(String categoryName) {
+        return this.productRepository.findByCategoryNameContainingIgnoreCase(categoryName);
+    }
+
+    public List<Product> searchProductsByBrandName(String brandName) {
+        return this.productRepository.findByBrandNameContainingIgnoreCase(brandName);
+    }
+
+    public List<Product> searchProductsBySupplierName(String supplierName) {
+        return this.productRepository.findBySupplierNameContainingIgnoreCase(supplierName);
+    }
 }

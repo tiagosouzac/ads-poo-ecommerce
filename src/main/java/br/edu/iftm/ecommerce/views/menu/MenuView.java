@@ -6,6 +6,8 @@ import br.edu.iftm.ecommerce.views.category.CategoryList;
 import br.edu.iftm.ecommerce.views.category.CategoryRegister;
 import br.edu.iftm.ecommerce.views.customer.CustomerList;
 import br.edu.iftm.ecommerce.views.customer.CustomerRegister;
+import br.edu.iftm.ecommerce.views.product.ProductList;
+import br.edu.iftm.ecommerce.views.product.ProductRegister;
 import br.edu.iftm.ecommerce.views.supplier.SupplierList;
 import br.edu.iftm.ecommerce.views.supplier.SupplierRegister;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,12 @@ public class MenuView extends javax.swing.JFrame {
     
     @Autowired
     SupplierList supplierList;
+    
+    @Autowired
+    ProductRegister productRegister;
+    
+    @Autowired
+    ProductList productList;
 
     
     /**
@@ -107,6 +115,11 @@ public class MenuView extends javax.swing.JFrame {
         jMenuCadastro.add(jMenuItem);
 
         jMenuItem1.setText("Cadastro Produto");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
         jMenuCadastro.add(jMenuItem1);
 
         jMenuItem2.setText("Cadastro Fornecedor");
@@ -146,6 +159,11 @@ public class MenuView extends javax.swing.JFrame {
         jMenuListagem.add(jMenuItem5);
 
         jMenuItem6.setText("Lista Produtos");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
         jMenuListagem.add(jMenuItem6);
 
         jMenuItem7.setText("Lista Fornecedores");
@@ -233,6 +251,16 @@ public class MenuView extends javax.swing.JFrame {
         supplierList.setVisible(true);
         dispose();
     }//GEN-LAST:event_jMenuItem7ActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        productRegister.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        productList.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     /**
      * @param args the command line arguments
