@@ -3,10 +3,7 @@ package br.edu.iftm.ecommerce.views.order;
 import br.edu.iftm.ecommerce.EcommerceApplication;
 import br.edu.iftm.ecommerce.builders.OrderBuilder;
 import br.edu.iftm.ecommerce.builders.OrderItemBuilder;
-import br.edu.iftm.ecommerce.controllers.CustomerController;
-import br.edu.iftm.ecommerce.controllers.OrderController;
-import br.edu.iftm.ecommerce.controllers.PaymentController;
-import br.edu.iftm.ecommerce.controllers.ProductController;
+import br.edu.iftm.ecommerce.controllers.*;
 import br.edu.iftm.ecommerce.enums.OrderStatus;
 import br.edu.iftm.ecommerce.enums.PaymentType;
 import br.edu.iftm.ecommerce.factories.PaymentMethodFactory;
@@ -39,6 +36,9 @@ public class OrderRegister extends javax.swing.JFrame {
 
     @Autowired
     private PaymentController paymentController;
+
+    @Autowired
+    private OrderItemController orderItemController;
 
     private List<OrderItem> selectedOrderItems = new ArrayList<>();
 
@@ -356,7 +356,6 @@ public class OrderRegister extends javax.swing.JFrame {
         }
 
         Order order = new OrderBuilder()
-                .items(selectedOrderItems)
                 .subtotal(getOrderSubTotal())
                 .discount(getOrderDiscount())
                 .total(getOrderTotal())
@@ -365,6 +364,11 @@ public class OrderRegister extends javax.swing.JFrame {
                 .build();
 
         order = orderController.saveOrder(order);
+
+        for (OrderItem orderItem : selectedOrderItems) {
+            orderItem.setOrder(order);
+            orderItemController.saveOrderItem(orderItem);
+        }
 
         PaymentMethodFactory paymentMethodFactory = new PaymentMethodFactory();
         PaymentMethod paymentMethod = paymentMethodFactory.createPaymentMethod(paymentType);
