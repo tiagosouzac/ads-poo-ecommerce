@@ -11,7 +11,7 @@ public class SupplierBuilder {
     private String cnpj;
     private String phone;
     private String email;
-    private List<Address> addresses;
+    private Address address;
     private List<Product> products;
 
     public SupplierBuilder name(String name) {
@@ -34,8 +34,8 @@ public class SupplierBuilder {
         return this;
     }
 
-    public SupplierBuilder addresses(List<Address> addresses) {
-        this.addresses = addresses;
+    public SupplierBuilder address(Address address) {
+        this.address = address;
         return this;
     }
 
@@ -50,7 +50,7 @@ public class SupplierBuilder {
         supplier.setCnpj(this.cnpj);
         supplier.setPhone(this.phone);
         supplier.setEmail(this.email);
-        supplier.setAddresses(this.addresses);
+        supplier.setAddress(this.address);
         supplier.setProducts(this.products);
         return supplier;
     }

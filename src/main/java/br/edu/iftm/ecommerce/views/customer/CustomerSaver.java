@@ -626,7 +626,7 @@ public class CustomerSaver extends javax.swing.JFrame {
                 .zipCode(strZipCode).build();
 
         newAddress.setAddressable(customer);
-        customer.setAddresses(List.of(newAddress));
+        customer.setAddress(newAddress);
 
         controller.saveCustomer(customer);
 
@@ -670,24 +670,23 @@ public class CustomerSaver extends javax.swing.JFrame {
                 return;
             }
 
-            Customer customer = new CustomerBuilder()
-                    .name(strName)
-                    .email(strEmail)
-                    .phone(strPhone).build();
+            UUID selectedCustomerId = customerIdMap.get(selectedIndex);
+            Customer customer = controller.getCustomerById(selectedCustomerId);
 
-            Address newAddress = new AddressBuilder()
-                    .street(strStreet)
-                    .number(strNumber)
-                    .neighborhood(strNeighborhood)
-                    .complement(strComplement)
-                    .city(strCity)
-                    .state(strState)
-                    .country(strCountry)
-                    .zipCode(strZipCode).build();
+            Address address = customer.getAddress();
+            address.setStreet(strStreet);
+            address.setNumber(strNumber);
+            address.setNeighborhood(strNeighborhood);
+            address.setComplement(strComplement);
+            address.setCity(strCity);
+            address.setState(strState);
+            address.setCountry(strCountry);
+            address.setZipCode(strZipCode);
 
-            newAddress.setAddressable(customer);
-            customer.setAddresses(List.of(newAddress));
-            customer.setId(customerIdMap.get(customerCmb.getSelectedIndex()));
+            customer.setName(strName);
+            customer.setEmail(strEmail);
+            customer.setPhone(strPhone);
+            customer.setAddress(address);
 
             controller.saveCustomer(customer);
 
@@ -705,7 +704,7 @@ public class CustomerSaver extends javax.swing.JFrame {
             Customer selectedCustomer = controller.getCustomerById(selectedCustomerId);
 
             if (selectedCustomer != null) {
-                Address address = selectedCustomer.getAddresses().get(0);
+                Address address = selectedCustomer.getAddress();
 
                 nameTxt.setText(selectedCustomer.getName());
                 emailTxt.setText(selectedCustomer.getEmail() != null ? selectedCustomer.getEmail() : "");

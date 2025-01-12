@@ -80,15 +80,7 @@ public class SupplierSaver extends javax.swing.JFrame {
                     } else if (matchingSuppliers.isEmpty()) {
                         supplierCmb.hidePopup();
                     }
-                    
-                    supplierCmb.addActionListener(e -> {
-                        String selectedSupplierName = (String) supplierCmb.getSelectedItem();
-                        if (selectedSupplierName != null) {
-                            supplierTxt.setText(selectedSupplierName);
-                        }
-                    });
                 });
-                
             }
         });
     }
@@ -612,7 +604,7 @@ public class SupplierSaver extends javax.swing.JFrame {
                     .zipCode(strZipCode).build();
 
             newAddress.setAddressable(supplier);
-            supplier.setAddresses(List.of(newAddress));
+            supplier.setAddress(newAddress);
 
             supplierController.saveSupplier(supplier); 
             JOptionPane.showMessageDialog(this, "Fornecedor cadastrado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
@@ -673,10 +665,7 @@ public class SupplierSaver extends javax.swing.JFrame {
             }
 
             UUID selectedSupplierId = supplierIdMap.get(selectedIndex);
-            Supplier supplier = supplierController.getSuppliers().stream()
-                    .filter(s -> s.getId().equals(selectedSupplierId))
-                    .findFirst()
-                    .orElse(null);
+            Supplier supplier = supplierController.getSupplierById(selectedSupplierId);
 
             if (supplier == null) {
                 JOptionPane.showMessageDialog(this, "Fornecedor não encontrado.", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -702,27 +691,26 @@ public class SupplierSaver extends javax.swing.JFrame {
                 return;
             }
 
+            Address address = supplier.getAddress();
+            if (address == null) {
+                address = new Address();
+            }
+
+            address.setStreet(strStreet);
+            address.setNumber(strNumber);
+            address.setNeighborhood(strNeighborhood);
+            address.setComplement(strComplement);
+            address.setCity(strCity);
+            address.setState(strState);
+            address.setCountry(strCountry);
+            address.setZipCode(strZipCode);
+            address.setAddressable(supplier);
+
             supplier.setName(strName);
             supplier.setCnpj(strCnpj);
             supplier.setEmail(strEmail);
             supplier.setPhone(strPhone);
-
-            Address updatedAddress = supplier.getAddresses().stream().findFirst().orElse(null);
-            if (updatedAddress == null) {
-                updatedAddress = new Address();
-                supplier.setAddresses(List.of(updatedAddress));
-            }
-
-            updatedAddress.setStreet(strStreet);
-            updatedAddress.setNumber(strNumber);
-            updatedAddress.setNeighborhood(strNeighborhood);
-            updatedAddress.setComplement(strComplement);
-            updatedAddress.setCity(strCity);
-            updatedAddress.setState(strState);
-            updatedAddress.setCountry(strCountry);
-            updatedAddress.setZipCode(strZipCode);
-
-            updatedAddress.setAddressable(supplier);
+            supplier.setAddress(address);
 
             supplierController.saveSupplier(supplier);
             JOptionPane.showMessageDialog(this, "Fornecedor atualizado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);

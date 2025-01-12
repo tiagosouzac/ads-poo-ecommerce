@@ -16,8 +16,8 @@ public class Customer extends Addressable {
     @Column(nullable = false)
     private String phone;
 
-    @OneToMany(mappedBy = "addressable", cascade = CascadeType.ALL)
-    private List<Address> addresses;
+    @OneToOne(mappedBy = "addressable", cascade = CascadeType.ALL)
+    private Address address;
 
     @OneToMany(mappedBy = "customer")
     private List<Order> orders;
@@ -49,12 +49,12 @@ public class Customer extends Addressable {
         this.phone = phone;
     }
 
-    public List<Address> getAddresses() {
-        return addresses;
+    public Address getAddress() {
+        return address;
     }
 
-    public void setAddresses(List<Address> address) {
-        this.addresses = address;
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     public List<Order> getOrders() {
