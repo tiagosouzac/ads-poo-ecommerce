@@ -3,6 +3,7 @@ package br.edu.iftm.ecommerce.views.order;
 import br.edu.iftm.ecommerce.EcommerceApplication;
 import br.edu.iftm.ecommerce.controllers.CustomerController;
 import br.edu.iftm.ecommerce.controllers.ProductController;
+import br.edu.iftm.ecommerce.enums.PaymentType;
 import br.edu.iftm.ecommerce.models.Customer;
 import br.edu.iftm.ecommerce.models.OrderItem;
 import br.edu.iftm.ecommerce.models.Product;
@@ -47,6 +48,7 @@ public class OrderRegister extends javax.swing.JFrame {
         disableSpecificTextFields();
         setupItemTotalCalculation();
         setupOrderDiscountListener();
+        populatePaymentComboBox();
     }
 
     /**
@@ -827,6 +829,13 @@ public class OrderRegister extends javax.swing.JFrame {
     public void setupListeners() {
         setupOrderDiscountListener();
     }
+    
+    private void populatePaymentComboBox() {
+    paymentCmb.removeAllItems();
+    for (PaymentType paymentType : PaymentType.values()) {
+        paymentCmb.addItem(paymentType.toString());
+    }
+}
 
     private void menuButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButtonActionPerformed
         MenuView menuView = context.getBean(MenuView.class);
