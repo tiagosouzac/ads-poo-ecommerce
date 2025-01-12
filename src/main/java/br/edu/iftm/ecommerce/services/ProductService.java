@@ -27,9 +27,16 @@ public class ProductService {
         return product;
     }
 
-    public List<Product> findByProductName(String productName) {
+    public List<Product> findAllByProductName(String productName) {
         System.out.println("Buscando produto pelo nome...");
-        List<Product> product = productRepository.findByNameContainingIgnoreCase(productName);
+        List<Product> product = productRepository.findAllByNameContainingIgnoreCase(productName);
+        System.out.println("Produto encontrado!");
+        return product;
+    }
+
+    public Product findByProductName(String productName) {
+        System.out.println("Buscando produto pelo nome...");
+        Product product = productRepository.findByNameContainingIgnoreCase(productName);
         System.out.println("Produto encontrado!");
         return product;
     }
@@ -65,5 +72,20 @@ public class ProductService {
         System.out.println("Removendo produto...");
         productRepository.delete(product);
         System.out.println("Produto removido com sucesso!");
+    }
+
+    public Product decreaseStock(UUID productId, int quantity) {
+        System.out.println("Diminuindo estoque do produto...");
+
+        Product product = productRepository.findById(productId).orElse(null);
+
+        if (product != null) {
+            product.setStock(product.getStock() - quantity);
+            productRepository.save(product);
+        }
+
+        System.out.println("Estoque do produto diminuído!");
+
+        return product;
     }
 }

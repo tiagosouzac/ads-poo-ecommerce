@@ -21,6 +21,14 @@ public class ProductController {
         return this.productService.findById(productId);
     }
 
+    public List<Product> getProductsByName(String productName) {
+        return this.productService.findAllByProductName(productName);
+    }
+
+    public Product getProductByName(String productName) {
+        return this.productService.findByProductName(productName);
+    }
+
     public void saveProduct(Product product) {
         this.productService.save(product);
     }
@@ -30,7 +38,7 @@ public class ProductController {
     }
 
     public List<Product> searchProductsByName(String name) {
-        return this.productService.findByProductName(name);
+        return this.productService.findAllByProductName(name);
     }
 
     public List<Product> searchProductsByCategoryName(String categoryName) {
@@ -43,5 +51,9 @@ public class ProductController {
 
     public List<Product> searchProductsBySupplierName(String supplierName) {
         return this.productService.findBySupplierName(supplierName);
+    }
+
+    public Product decreaseProductStock(UUID productId, int quantity) {
+        return this.productService.decreaseStock(productId, quantity);
     }
 }

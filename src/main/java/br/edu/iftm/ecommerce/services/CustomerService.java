@@ -27,6 +27,20 @@ public class CustomerService {
         return customer;
     }
 
+    public List<Customer> findAllByName(String name) {
+        System.out.println("Buscando cliente pelo nome: " + name);
+        List<Customer> customers = customerRepository.findAllByNameContainingIgnoreCase(name);
+        System.out.println("Clientes encontrados!");
+        return customers;
+    }
+
+    public Customer findByName(String name) {
+        System.out.println("Buscando cliente pelo nome: " + name);
+        Customer customer = customerRepository.findByNameContainingIgnoreCase(name);
+        System.out.println("Cliente encontrado!");
+        return customer;
+    }
+
     public void save(Customer customer) {
         System.out.println("Salvando cliente...");
         customerRepository.save(customer);

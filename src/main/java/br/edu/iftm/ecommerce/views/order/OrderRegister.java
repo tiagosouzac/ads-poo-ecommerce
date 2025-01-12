@@ -19,12 +19,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class OrderRegister extends javax.swing.JFrame {
@@ -53,11 +52,342 @@ public class OrderRegister extends javax.swing.JFrame {
     public OrderRegister(ApplicationContext context) {
         initComponents();
         this.context = context;
-        setupCustomerAutocomplete();
-        setupProductAutocomplete();
-        disableSpecificTextFields();
-        setupItemTotalCalculation();
-        populatePaymentComboBox();
+
+        setupCustomerCmb();
+        setupProductCmb();
+        setupPaymentCmb();
+    }
+
+    private void setupCustomerCmb() {
+        customerTxt.addCaretListener((evt) -> {
+            customerCmb.removeAllItems();
+
+            String customer = customerTxt.getText().trim();
+
+            if (!customer.isEmpty()) {
+                List<Customer> customers = customerController.getCustomersByName(customer);
+
+                for (Customer c : customers) {
+                    customerCmb.addItem(c.getName());
+                }
+            }
+        });
+    }
+
+    private Customer getSelectedCustomer() {
+        int selectedIndex = customerCmb.getSelectedIndex();
+
+        if (selectedIndex >= 0) {
+            return customerController.getCustomerByName(customerCmb.getItemAt(selectedIndex));
+        }
+
+        return null;
+    }
+
+    private void setupProductCmb() {
+        productTxt.addCaretListener((evt) -> {
+            productCmb.removeAllItems();
+
+            String product = productTxt.getText().trim();
+
+            if (!product.isEmpty()) {
+                List<Product> products = productController.getProductsByName(product);
+
+                for (Product p : products) {
+                    if (p.getStock() > 0) {
+                        productCmb.addItem(p.getName());
+                    } else {
+                        productCmb.addItem(p.getName() + " (Indisponível)");
+                    }
+                }
+            }
+        });
+
+        productCmb.addActionListener(this::onProductSelect);
+
+        quantityTxt.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                onQuantitySelect();
+            }
+        });
+
+        itemDiscountTxt.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                onDiscountSelect();
+            }
+        });
+    }
+
+    private Product getSelectedProduct() {
+        int selectedIndex = productCmb.getSelectedIndex();
+
+        if (selectedIndex >= 0) {
+            return productController.getProductByName(productCmb.getItemAt(selectedIndex));
+        }
+
+        return null;
+    }
+
+    private int getSelectedProductQuantity() {
+        int quantity = 1;
+
+        if (!quantityTxt.getText().trim().isEmpty()) {
+            try {
+                quantity = Integer.parseInt(quantityTxt.getText().trim());
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Quantidade inválida.", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+        return quantity;
+    }
+
+    private BigDecimal getSelectedProductDiscount() {
+        BigDecimal discount = BigDecimal.ZERO;
+
+        if (!itemDiscountTxt.getText().trim().isEmpty()) {
+            try {
+                discount = new BigDecimal(itemDiscountTxt.getText().trim());
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Desconto inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+        return discount;
+    }
+
+    private void onProductSelect(ActionEvent e) {
+        Product product = getSelectedProduct();
+
+        if (product != null && product.getStock() > 0) {
+            quantityTxt.setEnabled(true);
+            itemDiscountTxt.setEnabled(true);
+            itemPriceTxt.setText(product.getPrice().toString());
+            itemTotalTxt.setText(product.getPrice().toString());
+        } else {
+            quantityTxt.setEnabled(false);
+            itemDiscountTxt.setEnabled(false);
+            itemPriceTxt.setText("");
+            itemTotalTxt.setText("");
+        }
+    }
+
+    private void onQuantitySelect() {
+        int quantity = getSelectedProductQuantity();
+
+        if (quantity <= 0) {
+            JOptionPane.showMessageDialog(this, "Quantidade deve ser maior que 0.", "Erro", JOptionPane.ERROR_MESSAGE);
+            quantityTxt.setText("");
+        }
+
+        updateItemTotal();
+    }
+
+    private void onDiscountSelect() {
+        BigDecimal discount = getSelectedProductDiscount();
+
+        if (discount.compareTo(BigDecimal.ZERO) < 0) {
+            JOptionPane.showMessageDialog(this, "Desconto deve ser maior ou igual a 0.", "Erro", JOptionPane.ERROR_MESSAGE);
+            itemDiscountTxt.setText("");
+        }
+
+        updateItemTotal();
+    }
+
+    private void updateItemTotal() {
+        Product product = getSelectedProduct();
+
+        if (product != null) {
+            BigDecimal price = product.getPrice();
+            BigDecimal discount = getSelectedProductDiscount();
+            int quantity = getSelectedProductQuantity();
+
+            if (quantity > product.getStock()) {
+                JOptionPane.showMessageDialog(this, "Quantidade de produto indisponível em estoque. Disponível: " + product.getStock(), "Erro", JOptionPane.ERROR_MESSAGE);
+                quantityTxt.setText(String.valueOf(product.getStock()));
+                quantity = product.getStock();
+            }
+
+            BigDecimal subtotal = price.multiply(new BigDecimal(quantity));
+
+            if (discount.compareTo(subtotal) > 0) {
+                JOptionPane.showMessageDialog(this, "Desconto não pode ser maior que o valor do produto.", "Erro", JOptionPane.ERROR_MESSAGE);
+                itemDiscountTxt.setText("");
+                discount = BigDecimal.ZERO;
+            }
+
+            BigDecimal total = subtotal.subtract(discount);
+
+            itemPriceTxt.setText(subtotal.toString());
+            itemTotalTxt.setText(total.toString());
+        }
+    }
+
+    private void addOrderItem(ActionEvent e) {
+        Product product = getSelectedProduct();
+        int quantity = getSelectedProductQuantity();
+        BigDecimal subtotal = new BigDecimal(itemPriceTxt.getText().trim());
+        BigDecimal discount = getSelectedProductDiscount();
+        BigDecimal total = new BigDecimal(itemTotalTxt.getText().trim());
+
+        if (product != null) {
+            selectedOrderItems.removeIf(orderItem -> orderItem.getProduct().getId().equals(product.getId()));
+
+            OrderItem orderItem = new OrderItemBuilder()
+                    .product(product)
+                    .quantity(quantity)
+                    .subtotal(subtotal)
+                    .discount(discount)
+                    .total(total)
+                    .build();
+
+            selectedOrderItems.add(orderItem);
+            fillTable(selectedOrderItems);
+
+            updateOrderTotal();
+
+            clearProductSelectorFields();
+        }
+    }
+
+    private void removeOrderItem(ActionEvent e) {
+        int selectedRow = orderItemTable.getSelectedRow();
+
+        if (selectedRow >= 0) {
+            OrderItem orderItem = selectedOrderItems.get(selectedRow);
+
+            selectedOrderItems.remove(orderItem);
+            fillTable(selectedOrderItems);
+
+            updateOrderTotal();
+        }
+    }
+
+    private void clearProductSelectorFields() {
+        productTxt.setText("");
+        productCmb.removeAllItems();
+        quantityTxt.setText("");
+        itemDiscountTxt.setText("");
+        itemPriceTxt.setText("");
+        itemTotalTxt.setText("");
+        fillTable(selectedOrderItems);
+    }
+
+    private void setupPaymentCmb() {
+        paymentCmb.removeAllItems();
+
+        for (PaymentType paymentType : PaymentType.values()) {
+            paymentCmb.addItem(paymentType.toString());
+        }
+    }
+
+    private PaymentType getSelectedPaymentType() {
+        int selectedIndex = paymentCmb.getSelectedIndex();
+
+        if (selectedIndex >= 0) {
+            return PaymentType.values()[selectedIndex];
+        }
+
+        return null;
+    }
+
+    private void updateOrderTotal() {
+        BigDecimal subtotal = getOrderSubTotal();
+        orderSubtotalTxt.setText(subtotal.toString());
+
+        BigDecimal discount = getOrderDiscount();
+        orderDiscountTxt.setText(discount.toString());
+
+        BigDecimal total = getOrderTotal();
+        orderTotalTxt.setText(total.toString());
+    }
+
+    private BigDecimal getOrderDiscount() {
+        BigDecimal discount = BigDecimal.ZERO;
+
+        for (OrderItem orderItem : selectedOrderItems) {
+            BigDecimal itemDiscount = orderItem.getDiscount();
+            discount = discount.add(itemDiscount);
+        }
+
+        return discount;
+    }
+
+    private BigDecimal getOrderSubTotal() {
+        BigDecimal subTotal = BigDecimal.ZERO;
+
+        for (OrderItem orderItem : selectedOrderItems) {
+            BigDecimal itemSubtotal = orderItem.getSubtotal();
+            subTotal = subTotal.add(itemSubtotal);
+        }
+
+        return subTotal;
+    }
+
+    private BigDecimal getOrderTotal() {
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (OrderItem orderItem : selectedOrderItems) {
+            BigDecimal itemTotal = orderItem.getTotal();
+            total = total.add(itemTotal);
+        }
+
+        return total;
+    }
+
+    private void saveOrder(ActionEvent e) {
+        Customer customer = getSelectedCustomer();
+
+        if (customer == null) {
+            JOptionPane.showMessageDialog(this, "Selecione um cliente.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (selectedOrderItems.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Adicione pelo menos um item à venda.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        PaymentType paymentType = getSelectedPaymentType();
+
+        if (paymentType == null) {
+            JOptionPane.showMessageDialog(this, "Selecione uma forma de pagamento.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        Order order = new OrderBuilder()
+                .items(selectedOrderItems)
+                .subtotal(getOrderSubTotal())
+                .discount(getOrderDiscount())
+                .total(getOrderTotal())
+                .status(OrderStatus.PENDING)
+                .customer(customer)
+                .build();
+
+        order = orderController.saveOrder(order);
+
+        PaymentMethodFactory paymentMethodFactory = new PaymentMethodFactory();
+        PaymentMethod paymentMethod = paymentMethodFactory.createPaymentMethod(paymentType);
+        Payment payment = paymentMethod.createPayment(order, customer);
+
+        paymentController.savePayment(payment);
+
+        selectedOrderItems.forEach(orderItem -> {
+            productController.decreaseProductStock(orderItem.getProduct().getId(), orderItem.getQuantity());
+        });
+
+        JOptionPane.showMessageDialog(this, "Venda realizada com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+
+        reset();
+    }
+
+    private void reset() {
+        customerTxt.setText("");
+        customerCmb.removeAllItems();
+        clearProductSelectorFields();
+        selectedOrderItems.clear();
+        fillTable(selectedOrderItems);
+        updateOrderTotal();
     }
 
     /**
@@ -185,11 +515,7 @@ public class OrderRegister extends javax.swing.JFrame {
         addButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         addButton.setForeground(new java.awt.Color(255, 255, 255));
         addButton.setText("Adicionar");
-        addButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addButtonActionPerformed(evt);
-            }
-        });
+        addButton.addActionListener(this::addOrderItem);
 
         productTxt.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
 
@@ -234,11 +560,7 @@ public class OrderRegister extends javax.swing.JFrame {
         saveButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         saveButton1.setForeground(new java.awt.Color(255, 255, 255));
         saveButton1.setText("Salvar");
-        saveButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saveButton1ActionPerformed(evt);
-            }
-        });
+        saveButton1.addActionListener(this::saveOrder);
 
         orderItemTable.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][]{
@@ -258,20 +580,25 @@ public class OrderRegister extends javax.swing.JFrame {
         jLabel14.setText("Quantidade:");
 
         quantityTxt.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        quantityTxt.setEnabled(false);
 
         jLabel15.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(255, 255, 255));
         jLabel15.setText("Desconto:");
 
         itemDiscountTxt.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        itemDiscountTxt.setEnabled(false);
 
         jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(255, 255, 255));
         jLabel16.setText("Valor Item:");
 
+
         itemPriceTxt.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        itemPriceTxt.setEnabled(false);
 
         itemTotalTxt.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        itemTotalTxt.setEnabled(false);
 
         jLabel17.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel17.setForeground(new java.awt.Color(255, 255, 255));
@@ -301,14 +628,17 @@ public class OrderRegister extends javax.swing.JFrame {
         jLabel18.setText("Desconto:");
 
         orderDiscountTxt.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        orderDiscountTxt.setEnabled(false);
 
         jLabel19.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel19.setForeground(new java.awt.Color(255, 255, 255));
         jLabel19.setText("Subtotal:");
 
         orderSubtotalTxt.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        orderSubtotalTxt.setEnabled(false);
 
         orderTotalTxt.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        orderTotalTxt.setEnabled(false);
 
         jLabel21.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel21.setForeground(new java.awt.Color(255, 255, 255));
@@ -322,11 +652,7 @@ public class OrderRegister extends javax.swing.JFrame {
         deleteButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         deleteButton.setForeground(new java.awt.Color(255, 255, 255));
         deleteButton.setText("Excluir");
-        deleteButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteButtonActionPerformed(evt);
-            }
-        });
+        deleteButton.addActionListener(this::removeOrderItem);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -525,256 +851,6 @@ public class OrderRegister extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
-        try {
-            int selectedProductIndex = productCmb.getSelectedIndex();
-            String strQuantity = quantityTxt.getText().trim();
-            String strDiscount = itemDiscountTxt.getText().trim();
-            String strPrice = itemPriceTxt.getText().trim();
-            String strTotal = itemTotalTxt.getText().trim();
-
-            if (selectedProductIndex == -1) {
-                JOptionPane.showMessageDialog(this, "Selecione um produto.", "Erro", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            if (strQuantity.isEmpty() || strPrice.isEmpty() || strTotal.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Preencha todos os campos, exceto o de Desconto, que é opcional.", "Erro", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            UUID selectedProductId = productIdMap.get(selectedProductIndex);
-
-            Product selectedProduct = productController.getProducts().stream()
-                    .filter(c -> c.getId().equals(selectedProductId))
-                    .findFirst().orElse(null);
-
-            int quantity;
-            try {
-                quantity = Integer.parseInt(strQuantity);
-                int stock = selectedProduct.getStock();
-                if (quantity > stock) {
-                    JOptionPane.showMessageDialog(this, "Quantidade de produto indisponível em estoque. Disponível: " + stock, "Erro", JOptionPane.ERROR_MESSAGE);
-                    quantityTxt.setText(String.valueOf(stock));
-                    return;
-                }
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Quantidade inválida.", "Erro", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            BigDecimal price;
-            try {
-                price = new BigDecimal(strPrice);
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Preço inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            BigDecimal discount = BigDecimal.ZERO;
-            if (!strDiscount.isEmpty()) {
-                try {
-                    discount = new BigDecimal(strDiscount);
-                } catch (NumberFormatException e) {
-                    JOptionPane.showMessageDialog(this, "Desconto do Produto inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-            }
-
-            BigDecimal total;
-            try {
-                total = new BigDecimal(strTotal);
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Total do Produto inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            OrderItem orderItem = new OrderItemBuilder()
-                    .product(selectedProduct)
-                    .quantity(quantity)
-                    .subtotal(price)
-                    .discount(discount)
-                    .total(total).build();
-
-            selectedProduct.setStock(selectedProduct.getStock() - quantity);
-            productController.saveProduct(selectedProduct);
-
-            selectedOrderItems.add(orderItem);
-
-            fillTable(selectedOrderItems);
-            getDiscountOrderValue();
-            getSubTotalOrderValue();
-            getOrderTotalValue();
-
-            JOptionPane.showMessageDialog(this, "Produto adicionado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Falha ao tentar adicionar o produto.", "Erro", JOptionPane.ERROR_MESSAGE);
-            ex.printStackTrace();
-        }
-    }//GEN-LAST:event_addButtonActionPerformed
-
-    private void disableSpecificTextFields() {
-        itemPriceTxt.setEditable(false);
-        itemTotalTxt.setEditable(false);
-        orderDiscountTxt.setEditable(false);
-        orderSubtotalTxt.setEditable(false);
-        orderTotalTxt.setEditable(false);
-    }
-
-    private void setupItemTotalCalculation() {
-        quantityTxt.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                checkAndUpdateTotal();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                checkAndUpdateTotal();
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                checkAndUpdateTotal();
-            }
-        });
-
-        itemDiscountTxt.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                checkAndUpdateTotal();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                checkAndUpdateTotal();
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                checkAndUpdateTotal();
-            }
-        });
-
-        productCmb.addActionListener(e -> {
-            updateItemPriceFromSelectedProduct();
-        });
-    }
-
-    private void updateItemPriceFromSelectedProduct() {
-        int selectedIndex = productCmb.getSelectedIndex();
-        if (selectedIndex >= 0) {
-            Product selectedProduct = productController.getProducts().get(selectedIndex);
-            BigDecimal productPrice = selectedProduct.getPrice();
-            itemPriceTxt.setText(productPrice.setScale(2, RoundingMode.HALF_UP).toString());
-            itemTotalTxt.setText(productPrice.setScale(2, RoundingMode.HALF_UP).toString());
-        }
-    }
-
-    private void checkAndUpdateTotal() {
-        if (!quantityTxt.getText().isEmpty() && !itemPriceTxt.getText().isEmpty()) {
-            getItemTotalValue();
-        }
-    }
-
-    private void getItemTotalValue() {
-        try {
-            int selectedIndex = productCmb.getSelectedIndex();
-            Product selectedProduct = productController.getProducts().get(selectedIndex);
-
-            int stock = selectedProduct.getStock();
-            int quantity = Integer.parseInt(quantityTxt.getText());
-
-            if (quantity > stock) {
-//                JOptionPane.showMessageDialog(this, "Quantidade de produto indisponível em estoque.", "Erro", JOptionPane.ERROR_MESSAGE);
-                quantityTxt.setText(String.valueOf(stock));
-                return;
-            }
-
-            BigDecimal itemPrice = selectedProduct.getPrice();
-            BigDecimal subtotal = itemPrice.multiply(BigDecimal.valueOf(quantity));
-
-            itemPriceTxt.setText(subtotal.toString());
-
-            if (itemDiscountTxt.getText().isEmpty()) {
-                itemTotalTxt.setText(subtotal.toString());
-            } else {
-                BigDecimal discount = new BigDecimal(itemDiscountTxt.getText());
-                BigDecimal total = subtotal.subtract(discount);
-                itemTotalTxt.setText(total.toString());
-            }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Campos Quantidade ou Desconto de Produto são inválidos.", "Erro", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    private final Map<Integer, UUID> customerIdMap = new HashMap<>();
-    private final Map<Integer, UUID> productIdMap = new HashMap<>();
-
-    private void setupCustomerAutocomplete() {
-        customerTxt.addKeyListener(new java.awt.event.KeyAdapter() {
-            @Override
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                String typedText = customerTxt.getText().trim().toLowerCase();
-
-                SwingUtilities.invokeLater(() -> {
-                    List<Customer> matchingCustomers = customerController.getCustomers().stream()
-                            .filter(customer -> customer.getName().toLowerCase().contains(typedText))
-                            .toList();
-
-                    customerCmb.removeAllItems();
-                    customerIdMap.clear();
-
-                    int index = 0;
-                    for (Customer customer : matchingCustomers) {
-                        customerCmb.addItem(customer.getName());
-                        customerIdMap.put(index++, customer.getId());
-                    }
-
-                    if (!matchingCustomers.isEmpty() && !customerCmb.isPopupVisible()) {
-                        customerCmb.showPopup();
-                    } else if (matchingCustomers.isEmpty()) {
-                        customerCmb.hidePopup();
-                    }
-                });
-            }
-        });
-    }
-
-    private void setupProductAutocomplete() {
-        productTxt.addKeyListener(new java.awt.event.KeyAdapter() {
-            @Override
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                String typedText = productTxt.getText().trim().toLowerCase();
-
-                SwingUtilities.invokeLater(() -> {
-                    List<Product> matchingProducts = productController.getProducts().stream()
-                            .filter(product -> product.getName().toLowerCase().contains(typedText))
-                            .toList();
-
-                    productCmb.removeAllItems();
-                    productIdMap.clear();
-
-                    int index = 0;
-                    for (Product product : matchingProducts) {
-                        productCmb.addItem(product.getName());
-                        productIdMap.put(index, product.getId());
-                        if (index == 0) {
-                            itemPriceTxt.setText(String.valueOf(product.getPrice()));
-                        }
-                        index++;
-                    }
-
-                    if (!matchingProducts.isEmpty() && !productCmb.isPopupVisible()) {
-                        productCmb.showPopup();
-                    } else if (matchingProducts.isEmpty()) {
-                        productCmb.hidePopup();
-                        itemPriceTxt.setText("");
-                    }
-                });
-            }
-        });
-    }
 
     private void fillTable(List<OrderItem> selectedOrderList) {
         DefaultTableModel table = (DefaultTableModel)
@@ -792,38 +868,6 @@ public class OrderRegister extends javax.swing.JFrame {
         });
     }
 
-    private void getDiscountOrderValue() {
-        BigDecimal discount = BigDecimal.ZERO;
-
-        for (OrderItem orderItem : selectedOrderItems) {
-            BigDecimal itemDiscount = orderItem.getDiscount();
-            discount = discount.add(itemDiscount);
-        }
-
-        orderDiscountTxt.setText(discount.setScale(2, RoundingMode.HALF_UP).toString());
-    }
-
-    private void getSubTotalOrderValue() {
-        BigDecimal subTotal = BigDecimal.ZERO;
-
-        for (OrderItem orderItem : selectedOrderItems) {
-            BigDecimal itemSubtotal = orderItem.getSubtotal();
-            subTotal = subTotal.add(itemSubtotal);
-        }
-
-        orderSubtotalTxt.setText(subTotal.setScale(2, RoundingMode.HALF_UP).toString());
-    }
-
-    private void getOrderTotalValue() {
-        BigDecimal total = BigDecimal.ZERO;
-
-        for (OrderItem orderItem : selectedOrderItems) {
-            BigDecimal itemTotal = orderItem.getTotal();
-            total = total.add(itemTotal);
-        }
-
-        orderTotalTxt.setText(total.setScale(2, RoundingMode.HALF_UP).toString());
-    }
 
     private void populatePaymentComboBox() {
         paymentCmb.removeAllItems();
@@ -841,94 +885,6 @@ public class OrderRegister extends javax.swing.JFrame {
     private void customerCmbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerCmbActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_customerCmbActionPerformed
-
-    private void saveButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButton1ActionPerformed
-        try {
-            int selectedCustomerIndex = customerCmb.getSelectedIndex();
-            int selectedPaymentIndex = paymentCmb.getSelectedIndex();
-
-            if (selectedCustomerIndex == -1) {
-                JOptionPane.showMessageDialog(this, "Selecione um cliente.", "Erro", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            if (selectedPaymentIndex == -1) {
-                JOptionPane.showMessageDialog(this, "Selecione uma forma de pagamento.", "Erro", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            selectedOrderItems.forEach(orderItem -> {
-                Product product = orderItem.getProduct();
-                int quantity = orderItem.getQuantity();
-                int stock = product.getStock();
-
-                if (quantity > stock) {
-                    JOptionPane.showMessageDialog(this, "Quantidade de produto indisponível em estoque.", "Erro", JOptionPane.ERROR_MESSAGE);
-                }
-            });
-
-            UUID selectedCustomerId = customerIdMap.get(selectedCustomerIndex);
-
-            Customer selectedCustomer = customerController.getCustomerById(selectedCustomerId);
-
-            PaymentType selectedPaymentType = PaymentType.values()[selectedPaymentIndex];
-
-            BigDecimal orderSubtotal = new BigDecimal(orderSubtotalTxt.getText());
-            BigDecimal orderDiscount = new BigDecimal(orderDiscountTxt.getText().isEmpty() ? "0" : orderDiscountTxt.getText());
-            BigDecimal orderTotal = new BigDecimal(orderTotalTxt.getText());
-
-            Order order = new OrderBuilder()
-                    .items(selectedOrderItems)
-                    .subtotal(orderSubtotal)
-                    .discount(orderDiscount)
-                    .total(orderTotal)
-                    .status(OrderStatus.PENDING)
-                    .customer(selectedCustomer)
-                    .build();
-
-            order = orderController.saveOrder(order);
-
-            PaymentMethodFactory paymentMethodFactory = new PaymentMethodFactory();
-            PaymentMethod paymentMethod = paymentMethodFactory.createPaymentMethod(selectedPaymentType);
-            Payment payment = paymentMethod.createPayment(order, selectedCustomer);
-
-            paymentController.savePayment(payment);
-
-            selectedOrderItems.forEach(orderItem -> {
-                Product product = orderItem.getProduct();
-                int quantity = orderItem.getQuantity();
-                int stock = product.getStock();
-                product.setStock(stock - quantity);
-                productController.saveProduct(product);
-            });
-
-            JOptionPane.showMessageDialog(this, "Venda realizada com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Falha ao tentar salvar a venda.", "Erro", JOptionPane.ERROR_MESSAGE);
-            ex.printStackTrace();
-        }
-    }//GEN-LAST:event_saveButton1ActionPerformed
-
-    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
-        int selectedRow = orderItemTable.getSelectedRow();
-
-        if (selectedRow >= 0) {
-            OrderItem selectedOrderItem = selectedOrderItems.get(selectedRow);
-            BigDecimal itemTotal = selectedOrderItem.getTotal();
-
-            selectedOrderItems.remove(selectedOrderItem);
-
-            fillTable(selectedOrderItems);
-
-            BigDecimal currentSubtotal = new BigDecimal(orderSubtotalTxt.getText());
-            BigDecimal newSubtotal = currentSubtotal.subtract(itemTotal);
-            orderSubtotalTxt.setText(newSubtotal.setScale(2, RoundingMode.HALF_UP).toString());
-            getOrderTotalValue();
-            JOptionPane.showMessageDialog(null, "Produto removido com sucesso!");
-        } else {
-            JOptionPane.showMessageDialog(null, "Nenhum produto selecionado para remoção.");
-        }
-    }//GEN-LAST:event_deleteButtonActionPerformed
 
     /**
      * @param args the command line arguments

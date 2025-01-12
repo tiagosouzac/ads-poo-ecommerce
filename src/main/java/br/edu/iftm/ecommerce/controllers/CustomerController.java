@@ -21,6 +21,14 @@ public class CustomerController {
         return this.customerService.findById(customerId);
     }
 
+    public List<Customer> getCustomersByName(String name) {
+        return this.customerService.findAllByName(name);
+    }
+
+    public Customer getCustomerByName(String name) {
+        return this.customerService.findByName(name);
+    }
+
     public void saveCustomer(Customer customer) {
         this.customerService.save(customer);
     }
