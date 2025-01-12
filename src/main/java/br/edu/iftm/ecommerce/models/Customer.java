@@ -1,10 +1,6 @@
 package br.edu.iftm.ecommerce.models;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.util.List;
 
@@ -20,8 +16,8 @@ public class Customer extends Addressable {
     @Column(nullable = false)
     private String phone;
 
-    @OneToMany(mappedBy = "addressable", cascade = CascadeType.ALL)
-    private List<Address> addresses;
+    @OneToOne(mappedBy = "addressable", cascade = CascadeType.ALL)
+    private Address address;
 
     @OneToMany(mappedBy = "customer")
     private List<Order> orders;
@@ -53,12 +49,12 @@ public class Customer extends Addressable {
         this.phone = phone;
     }
 
-    public List<Address> getAddresses() {
-        return addresses;
+    public Address getAddress() {
+        return address;
     }
 
-    public void setAddresses(List<Address> addresses) {
-        this.addresses = addresses;
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     public List<Order> getOrders() {

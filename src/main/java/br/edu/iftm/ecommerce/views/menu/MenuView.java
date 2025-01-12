@@ -5,7 +5,7 @@ import br.edu.iftm.ecommerce.views.brand.BrandSaver;
 import br.edu.iftm.ecommerce.views.category.CategoryList;
 import br.edu.iftm.ecommerce.views.category.CategorySaver;
 import br.edu.iftm.ecommerce.views.customer.CustomerList;
-import br.edu.iftm.ecommerce.views.customer.CustomerRegister;
+import br.edu.iftm.ecommerce.views.customer.CustomerSaver;
 import br.edu.iftm.ecommerce.views.order.OrderList;
 import br.edu.iftm.ecommerce.views.order.OrderRegister;
 import br.edu.iftm.ecommerce.views.product.ProductList;
@@ -25,7 +25,7 @@ public class MenuView extends javax.swing.JFrame {
     private CategoryList categoryList;
     
     @Autowired
-    private CustomerRegister customerRegister;
+    private CustomerSaver customerSaver;
     
     @Autowired
     private CustomerList customerList;
@@ -249,7 +249,7 @@ public class MenuView extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        customerRegister.setVisible(true);
+        customerSaver.setVisible(true);
         dispose();
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
