@@ -24,7 +24,7 @@ public class Brand {
     @Column(nullable = false)
     private String phone;
 
-    @OneToMany(mappedBy = "brand")
+    @OneToMany(mappedBy = "brand", cascade = CascadeType.ALL)
     private List<Product> products;
 
     public UUID getId() {

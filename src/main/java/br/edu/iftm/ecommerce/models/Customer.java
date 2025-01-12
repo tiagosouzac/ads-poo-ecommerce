@@ -19,10 +19,10 @@ public class Customer extends Addressable {
     @OneToOne(mappedBy = "addressable", cascade = CascadeType.ALL)
     private Address address;
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Order> orders;
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Payment> payments;
 
     public String getName() {

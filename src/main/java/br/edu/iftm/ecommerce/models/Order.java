@@ -30,10 +30,10 @@ public class Order {
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> items;
 
-    @OneToOne(mappedBy = "order")
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Payment payment;
 
     public UUID getId() {

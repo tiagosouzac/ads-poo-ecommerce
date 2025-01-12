@@ -22,7 +22,7 @@ public class Supplier extends Addressable {
     @OneToOne(mappedBy = "addressable", cascade = CascadeType.ALL)
     private Address address;
 
-    @OneToMany(mappedBy = "supplier")
+    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL)
     private List<Product> products;
 
     public String getName() {

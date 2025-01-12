@@ -18,7 +18,7 @@ public class Category {
     @Column(nullable = false)
     private String description;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<Product> products;
 
     public UUID getId() {
