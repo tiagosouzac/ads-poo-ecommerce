@@ -9,7 +9,7 @@ import br.edu.iftm.ecommerce.views.customer.CustomerRegister;
 import br.edu.iftm.ecommerce.views.order.OrderList;
 import br.edu.iftm.ecommerce.views.order.OrderRegister;
 import br.edu.iftm.ecommerce.views.product.ProductList;
-import br.edu.iftm.ecommerce.views.product.ProductRegister;
+import br.edu.iftm.ecommerce.views.product.ProductSaver;
 import br.edu.iftm.ecommerce.views.supplier.SupplierList;
 import br.edu.iftm.ecommerce.views.supplier.SupplierRegister;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +43,7 @@ public class MenuView extends javax.swing.JFrame {
     private SupplierList supplierList;
     
     @Autowired
-    private ProductRegister productRegister;
+    private ProductSaver productRegister;
     
     @Autowired
     private ProductList productList;
