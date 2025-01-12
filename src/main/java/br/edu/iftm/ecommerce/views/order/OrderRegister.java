@@ -1,6 +1,7 @@
 package br.edu.iftm.ecommerce.views.order;
 
 import br.edu.iftm.ecommerce.EcommerceApplication;
+import br.edu.iftm.ecommerce.builders.OrderItemBuilder;
 import br.edu.iftm.ecommerce.controllers.CustomerController;
 import br.edu.iftm.ecommerce.controllers.ProductController;
 import br.edu.iftm.ecommerce.enums.PaymentType;
@@ -574,12 +575,12 @@ public class OrderRegister extends javax.swing.JFrame {
                 return;
             }
 
-            OrderItem orderItem = new OrderItem();
-            orderItem.setProduct(selectedProduct);
-            orderItem.setQuantity(quantity);
-            orderItem.setSubtotal(price);
-            orderItem.setDiscount(discount);
-            orderItem.setTotal(total);
+            OrderItem orderItem = new OrderItemBuilder()
+                    .product(selectedProduct)
+                    .quantity(quantity)
+                    .subtotal(price)
+                    .discount(discount)
+                    .total(total).build();
 
             selectedOrderItems.add(orderItem);
 

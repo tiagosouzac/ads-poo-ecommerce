@@ -1,6 +1,8 @@
 package br.edu.iftm.ecommerce.views.supplier;
 
 import br.edu.iftm.ecommerce.EcommerceApplication;
+import br.edu.iftm.ecommerce.builders.AddressBuilder;
+import br.edu.iftm.ecommerce.builders.SupplierBuilder;
 import br.edu.iftm.ecommerce.controllers.AddressController;
 import br.edu.iftm.ecommerce.controllers.SupplierController;
 import br.edu.iftm.ecommerce.models.Address;
@@ -432,21 +434,21 @@ public class SupplierRegister extends javax.swing.JFrame {
                 return;
             }
 
-            Supplier supplier = new Supplier();
-            supplier.setName(strName);
-            supplier.setCnpj(strCnpj);
-            supplier.setEmail(strEmail);
-            supplier.setPhone(strPhone);
+            Supplier supplier = new SupplierBuilder()
+                    .name(strName)
+                    .cnpj(strCnpj)
+                    .email(strEmail)
+                    .phone(strPhone).build();
 
-            Address newAddress = new Address();
-            newAddress.setStreet(strStreet);
-            newAddress.setNumber(strNumber);
-            newAddress.setNeighborhood(strNeighborhood);
-            newAddress.setComplement(strComplement);
-            newAddress.setCity(strCity);
-            newAddress.setState(strState);
-            newAddress.setCountry(strCountry);
-            newAddress.setZipCode(strZipCode);
+            Address newAddress = new AddressBuilder()
+                    .street(strStreet)
+                    .number(strNumber)
+                    .neighborhood(strNeighborhood)
+                    .complement(strComplement)
+                    .city(strCity)
+                    .state(strState)
+                    .country(strCountry)
+                    .zipCode(strZipCode).build();
 
             newAddress.setAddressable(supplier);
             supplier.setAddresses(List.of(newAddress));

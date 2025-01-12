@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class OrderItemService {
@@ -17,6 +18,13 @@ public class OrderItemService {
         List<OrderItem> orderItems = orderItemRepository.findAll();
         System.out.println("Itens encontrados!");
         return orderItems;
+    }
+
+    public OrderItem findById(UUID id) {
+        System.out.println("Buscando item por id...");
+        OrderItem orderItem = orderItemRepository.findById(id).orElse(null);
+        System.out.println("Item encontrado!");
+        return orderItem;
     }
 
     public void save(OrderItem orderItem) {

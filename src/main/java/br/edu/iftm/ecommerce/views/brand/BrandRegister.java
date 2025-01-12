@@ -1,6 +1,7 @@
 package br.edu.iftm.ecommerce.views.brand;
 
 import br.edu.iftm.ecommerce.EcommerceApplication;
+import br.edu.iftm.ecommerce.builders.BrandBuilder;
 import br.edu.iftm.ecommerce.controllers.BrandController;
 import br.edu.iftm.ecommerce.models.Brand;
 import br.edu.iftm.ecommerce.views.menu.MenuView;
@@ -259,11 +260,11 @@ public class BrandRegister extends javax.swing.JFrame {
             return;
         }
 
-        Brand b = new Brand();
-        b.setName(strName);
-        b.setWebsite(strWebsite);
-        b.setEmail(strEmail);
-        b.setPhone(strPhone);
+        Brand b = new BrandBuilder()
+                .name(strName)
+                .website(strWebsite)
+                .email(strEmail)
+                .phone(strPhone).build();
         
         controller.saveBrand(b); 
         JOptionPane.showMessageDialog(this, "Marca cadastrada com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);

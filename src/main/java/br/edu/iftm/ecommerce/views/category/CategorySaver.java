@@ -1,6 +1,7 @@
 package br.edu.iftm.ecommerce.views.category;
 
 import br.edu.iftm.ecommerce.EcommerceApplication;
+import br.edu.iftm.ecommerce.builders.CategoryBuilder;
 import br.edu.iftm.ecommerce.controllers.CategoryController;
 import br.edu.iftm.ecommerce.models.Category;
 import br.edu.iftm.ecommerce.views.menu.MenuView;
@@ -346,17 +347,16 @@ public class CategorySaver extends javax.swing.JFrame {
         try{
             String strName = nameTxt.getText();
             String strDescription = descriptionTxt.getText();
-            
-            Category c = new Category();
-            
+
             if(!(strName.isBlank()) && !(strDescription.isBlank())){
-                c.setName(strName);
-                c.setDescription(strDescription);
+                Category c = new CategoryBuilder()
+                        .name(strName)
+                        .description(strDescription).build();
+
                 controller.saveCategory(c);
                 JOptionPane.showMessageDialog(null, "Categoria cadastrada com sucesso!");
-            } else{
+            } else {
               JOptionPane.showMessageDialog(null, "Preencha todos os campos.");
-
             }
         } catch(Exception ex){
             JOptionPane.showMessageDialog(null, "Falha ao tentar cadastrar Categoria");

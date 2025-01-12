@@ -1,6 +1,8 @@
 package br.edu.iftm.ecommerce.views.customer;
 
 import br.edu.iftm.ecommerce.EcommerceApplication;
+import br.edu.iftm.ecommerce.builders.AddressBuilder;
+import br.edu.iftm.ecommerce.builders.CustomerBuilder;
 import br.edu.iftm.ecommerce.controllers.AddressController;
 import br.edu.iftm.ecommerce.controllers.CustomerController;
 import br.edu.iftm.ecommerce.models.Address;
@@ -410,20 +412,20 @@ public class CustomerRegister extends javax.swing.JFrame {
             return;
         }
 
-        Customer customer = new Customer();
-        customer.setName(strName);
-        customer.setEmail(strEmail);
-        customer.setPhone(strPhone);
+        Customer customer = new CustomerBuilder()
+                .name(strName)
+                .email(strEmail)
+                .phone(strPhone).build();
 
-        Address newAddress = new Address();
-        newAddress.setStreet(strStreet);
-        newAddress.setNumber(strNumber);
-        newAddress.setNeighborhood(strNeighborhood);
-        newAddress.setComplement(strComplement);
-        newAddress.setCity(strCity);
-        newAddress.setState(strState);
-        newAddress.setCountry(strCountry);
-        newAddress.setZipCode(strZipCode);
+        Address newAddress = new AddressBuilder()
+                .street(strStreet)
+                .number(strNumber)
+                .neighborhood(strNeighborhood)
+                .complement(strComplement)
+                .city(strCity)
+                .state(strState)
+                .country(strCountry)
+                .zipCode(strZipCode).build();
 
         newAddress.setAddressable(customer);
         customer.setAddresses(List.of(newAddress));
