@@ -99,7 +99,7 @@ public class OrderRegister extends javax.swing.JFrame {
         orderTotalTxt = new javax.swing.JTextField();
         jLabel21 = new javax.swing.JLabel();
         jLabel25 = new javax.swing.JLabel();
-        typeTxt = new javax.swing.JComboBox<>();
+        paymentCmb = new javax.swing.JComboBox<>();
         deleteButton = new javax.swing.JButton();
         menuButton = new javax.swing.JButton();
 
@@ -307,8 +307,6 @@ public class OrderRegister extends javax.swing.JFrame {
         jLabel25.setForeground(new java.awt.Color(255, 255, 255));
         jLabel25.setText("Forma de Pagamento:");
 
-        typeTxt.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         deleteButton.setBackground(new java.awt.Color(255, 0, 51));
         deleteButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         deleteButton.setForeground(new java.awt.Color(255, 255, 255));
@@ -386,7 +384,7 @@ public class OrderRegister extends javax.swing.JFrame {
                                 .addGroup(jPanel3Layout.createSequentialGroup()
                                     .addComponent(jLabel25)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(typeTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(paymentCmb, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(jPanel3Layout.createSequentialGroup()
                                     .addComponent(jLabel18)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -454,7 +452,7 @@ public class OrderRegister extends javax.swing.JFrame {
                     .addComponent(jLabel19)
                     .addComponent(orderSubtotalTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel25)
-                    .addComponent(typeTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(paymentCmb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(orderTotalTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -975,10 +973,10 @@ public class OrderRegister extends javax.swing.JFrame {
     private javax.swing.JTable orderItemTable;
     private javax.swing.JTextField orderSubtotalTxt;
     private javax.swing.JTextField orderTotalTxt;
+    private javax.swing.JComboBox<String> paymentCmb;
     private javax.swing.JComboBox<String> productCmb;
     private javax.swing.JTextField productTxt;
     private javax.swing.JTextField quantityTxt;
     private javax.swing.JButton saveButton1;
-    private javax.swing.JComboBox<String> typeTxt;
     // End of variables declaration//GEN-END:variables
 }

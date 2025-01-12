@@ -389,7 +389,34 @@ public class CategorySaver extends javax.swing.JFrame {
     }//GEN-LAST:event_consultButtonActionPerformed
 
     private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
-        // TODO add your handling code here:
+        try {
+            String strName = nameTxt.getText();
+            String strDescription = descriptionTxt.getText();
+            int selectedIndex = categoryCmb.getSelectedIndex();
+
+            if (!strName.isBlank() && !strDescription.isBlank() && selectedIndex >= 0) {
+                String selectedCategoryName = (String) categoryCmb.getSelectedItem();
+                Category selectedCategory = controller.getCategories().stream()
+                    .filter(category -> category.getName().equals(selectedCategoryName))
+                    .findFirst()
+                    .orElse(null);
+
+                if (selectedCategory != null) {
+                    UUID categoryId = selectedCategory.getId();
+                    selectedCategory.setName(strName);
+                    selectedCategory.setDescription(strDescription);
+                    controller.updateCategory(selectedCategory);
+                    JOptionPane.showMessageDialog(null, "Categoria editada com sucesso!");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Categoria selecionada não encontrada.");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Preencha todos os campos ou selecione uma categoria.");
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Falha ao tentar editar a Categoria.");
+            System.out.println(ex);
+        }
     }//GEN-LAST:event_editButtonActionPerformed
 
     /**

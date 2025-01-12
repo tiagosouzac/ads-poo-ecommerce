@@ -25,6 +25,12 @@ public class CategoryService {
         System.out.println("Categoria salva com sucesso!");
     }
 
+    public void update(Category category) {
+        System.out.println("Atualizando categoria...");
+        categoryRepository.save(category);
+        System.out.println("Categoria atualizada com sucesso!");
+    }
+    
     public void delete(Category category) {
         System.out.println("Removendo categoria...");
         categoryRepository.delete(category);
