@@ -7,7 +7,6 @@ import br.edu.iftm.ecommerce.views.menu.MenuView;
 import jakarta.annotation.PostConstruct;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -326,7 +325,7 @@ public class CategoryList extends javax.swing.JFrame {
         } else {
             List<Category> filteredList = list.stream()
                     .filter(category -> category.getName().toLowerCase().contains(searchText.toLowerCase()))
-                    .collect(Collectors.toList());
+                    .toList();
 
             fillTable(filteredList);
 
@@ -339,7 +338,7 @@ public class CategoryList extends javax.swing.JFrame {
     private void updateCategoryList() {
         try {
             this.list = controller.getCategories();
-            fillTable(this.list);
+            searchAndUpdateTable();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Erro ao carregar categorias: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
@@ -353,6 +352,7 @@ public class CategoryList extends javax.swing.JFrame {
             UUID selectedId = (UUID) categoryTable.getValueAt(selectedRow, 0);
             Category customer = categoryController.getCategoryById(selectedId);
             categoryController.deleteCategory(customer);
+            updateCategoryList();
         }
     }//GEN-LAST:event_deleteButtonActionPerformed
 

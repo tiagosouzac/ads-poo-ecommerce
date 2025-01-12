@@ -9,7 +9,6 @@ import br.edu.iftm.ecommerce.views.menu.MenuView;
 import jakarta.annotation.PostConstruct;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -393,7 +392,7 @@ public class CustomerList extends javax.swing.JFrame {
         } else {
             List<Customer> filteredList = customerList.stream()
                     .filter(customer -> customer.getName().toLowerCase().contains(searchText.toLowerCase()))
-                    .collect(Collectors.toList());
+                    .toList();
 
             fillTable(filteredList);
 
@@ -406,7 +405,7 @@ public class CustomerList extends javax.swing.JFrame {
     private void updateCustomerList() {
         try {
             this.customerList = customerController.getCustomers();
-            fillTable(this.customerList);
+            searchAndUpdateTable();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Erro ao carregar clientes: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
@@ -460,6 +459,7 @@ public class CustomerList extends javax.swing.JFrame {
             UUID selectedId = (UUID) customerTable.getValueAt(selectedRow, 0);
             Customer customer = customerController.getCustomerById(selectedId);
             customerController.deleteCustomer(customer);
+            updateCustomerList();
         }
     }//GEN-LAST:event_deleteButtonActionPerformed
 

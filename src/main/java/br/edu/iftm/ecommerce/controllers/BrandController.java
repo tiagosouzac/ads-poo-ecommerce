@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 public class BrandController {
@@ -14,6 +15,10 @@ public class BrandController {
 
     public List<Brand> getBrands() {
         return this.brandService.findAll();
+    }
+    
+     public Brand getBrandById(UUID brandId) {
+        return this.brandService.findById(brandId);
     }
 
     public void saveBrand(Brand brand) {

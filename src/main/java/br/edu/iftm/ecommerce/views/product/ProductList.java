@@ -358,7 +358,7 @@ public class ProductList extends javax.swing.JFrame {
     private void updateProductList() {
         try {
             this.productList = productController.getProducts();
-            fillTable(this.productList);
+            searchAndUpdateTable();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Erro ao carregar produtos: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
@@ -404,6 +404,7 @@ public class ProductList extends javax.swing.JFrame {
             UUID selectedId = (UUID) productTable.getValueAt(selectedRow, 0);
             Product product = productController.getProductById(selectedId);
             productController.deleteProduct(product);
+            updateProductList();
         }
     }//GEN-LAST:event_deleteButtonActionPerformed
 

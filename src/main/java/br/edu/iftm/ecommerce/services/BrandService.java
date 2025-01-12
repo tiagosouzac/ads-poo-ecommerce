@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class BrandService {
@@ -18,6 +19,14 @@ public class BrandService {
         System.out.println("Marcas encontradas!");
         return brands;
     }
+    
+    public Brand findById(UUID brandId) {
+        System.out.println("Buscando marca com id: " + brandId);
+        Brand brand = brandRepository.findById(brandId).orElse(null);
+        System.out.println("Marca encontrada!");
+        return brand;
+    }
+
 
     public void save(Brand brand) {
         System.out.println("Salvando marca...");

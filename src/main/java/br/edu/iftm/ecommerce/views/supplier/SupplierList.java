@@ -9,7 +9,6 @@ import br.edu.iftm.ecommerce.views.menu.MenuView;
 import jakarta.annotation.PostConstruct;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -389,11 +388,11 @@ public class SupplierList extends javax.swing.JFrame {
         String searchText = searchTxt.getText().trim();
 
         if (searchText.isEmpty()) {
-            fillTable(supplierList); 
+            fillTable(supplierList);
         } else {
             List<Supplier> filteredList = supplierList.stream()
                     .filter(supplier -> supplier.getName().toLowerCase().contains(searchText.toLowerCase()))
-                    .collect(Collectors.toList());
+                    .toList();
 
             fillTable(filteredList);
 
@@ -406,7 +405,7 @@ public class SupplierList extends javax.swing.JFrame {
     private void updateSupplierList() {
         try {
             this.supplierList = supplierController.getSuppliers();
-            fillTable(this.supplierList);
+            searchAndUpdateTable();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Erro ao carregar fornecedores: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
@@ -460,6 +459,7 @@ public class SupplierList extends javax.swing.JFrame {
             UUID selectedId = (UUID) supplierTable.getValueAt(selectedRow, 0);
             Supplier supplier = supplierController.getSupplierById(selectedId);
             supplierController.deleteSupplier(supplier);
+            updateSupplierList();
         }
     }//GEN-LAST:event_deleteButtonActionPerformed
 
