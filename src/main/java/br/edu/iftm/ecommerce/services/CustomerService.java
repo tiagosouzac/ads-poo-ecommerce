@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class CustomerService {
@@ -17,6 +18,13 @@ public class CustomerService {
         List<Customer> customers = customerRepository.findAll();
         System.out.println("Clientes encontrados!");
         return customers;
+    }
+    
+    public Customer findById(UUID customerId) {
+        System.out.println("Buscando cliente pelo id: " + customerId);
+        Customer customer = customerRepository.findById(customerId).orElse(null);
+        System.out.println("Cliente encontrado!");
+        return customer;
     }
 
     public void save(Customer customer) {

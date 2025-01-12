@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 public class SupplierController {
@@ -14,6 +15,10 @@ public class SupplierController {
 
     public List<Supplier> getSuppliers() {
         return this.supplierService.findAll();
+    }
+
+    public Supplier getSupplierById(UUID supplierId) {
+        return this.supplierService.findById(supplierId);
     }
 
     public void saveSupplier(Supplier supplier) {

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 public class CategoryController {
@@ -14,6 +15,10 @@ public class CategoryController {
 
     public List<Category> getCategories() {
         return this.categoryService.findAll();
+    }
+
+    public Category getCategoryById(UUID categoryId) {
+        return this.categoryService.findById(categoryId);
     }
 
     public void saveCategory(Category category) {

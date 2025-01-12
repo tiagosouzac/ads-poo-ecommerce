@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class SupplierService {
@@ -17,6 +18,13 @@ public class SupplierService {
         List<Supplier> suppliers = supplierRepository.findAll();
         System.out.println("Fornecedores encontrados!");
         return suppliers;
+    }
+
+    public Supplier findById(UUID supplierId) {
+        System.out.println("Buscando fornecedor pelo id: " + supplierId);
+        Supplier supplier = supplierRepository.findById(supplierId).orElse(null);
+        System.out.println("Fornecedor encontrado!");
+        return supplier;
     }
 
     public void save(Supplier supplier) {

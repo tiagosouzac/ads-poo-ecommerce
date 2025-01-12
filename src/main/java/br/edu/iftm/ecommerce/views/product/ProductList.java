@@ -74,6 +74,7 @@ public class ProductList extends javax.swing.JFrame {
         brandRadioBtn = new javax.swing.JRadioButton();
         categoryRadioBtn = new javax.swing.JRadioButton();
         supplierRadioBtn = new javax.swing.JRadioButton();
+        deleteButton = new javax.swing.JButton();
         menuButton = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
@@ -166,6 +167,16 @@ public class ProductList extends javax.swing.JFrame {
         supplierRadioBtn.setForeground(new java.awt.Color(255, 255, 255));
         supplierRadioBtn.setText("Fornecedor");
 
+        deleteButton.setBackground(new java.awt.Color(255, 0, 0));
+        deleteButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        deleteButton.setForeground(new java.awt.Color(255, 255, 255));
+        deleteButton.setText("Excluir");
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -194,7 +205,10 @@ public class ProductList extends javax.swing.JFrame {
                         .addGap(58, 58, 58)
                         .addComponent(categoryRadioBtn)
                         .addGap(40, 40, 40)
-                        .addComponent(supplierRadioBtn)))
+                        .addComponent(supplierRadioBtn))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(371, 371, 371)
+                        .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(51, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -215,7 +229,9 @@ public class ProductList extends javax.swing.JFrame {
                     .addComponent(searchButton))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(95, 95, 95))
+                .addGap(18, 18, 18)
+                .addComponent(deleteButton)
+                .addGap(47, 47, 47))
         );
 
         menuButton.setBackground(new java.awt.Color(102, 0, 51));
@@ -267,11 +283,10 @@ public class ProductList extends javax.swing.JFrame {
                             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(187, 187, 187)
-                        .addComponent(jLabel3)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(187, 187, 187)
+                                .addComponent(jLabel3))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(33, 33, 33)
                                 .addComponent(menuButton))
@@ -286,8 +301,8 @@ public class ProductList extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 435, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -381,6 +396,16 @@ public class ProductList extends javax.swing.JFrame {
        menuView.setVisible(true);
        dispose();
     }//GEN-LAST:event_menuButtonActionPerformed
+
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
+        int selectedRow = productTable.getSelectedRow();
+
+        if (selectedRow != -1) {
+            UUID selectedId = (UUID) productTable.getValueAt(selectedRow, 0);
+            Product product = productController.getProductById(selectedId);
+            productController.deleteProduct(product);
+        }
+    }//GEN-LAST:event_deleteButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -486,6 +511,7 @@ public class ProductList extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton brandRadioBtn;
     private javax.swing.JRadioButton categoryRadioBtn;
+    private javax.swing.JButton deleteButton;
     private javax.swing.JTextArea descriptionTxt;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;

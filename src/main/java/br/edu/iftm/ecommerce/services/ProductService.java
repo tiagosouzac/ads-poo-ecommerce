@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ProductService {
@@ -17,6 +18,13 @@ public class ProductService {
         List<Product> products = productRepository.findAll();
         System.out.println("Produtos encontrados!");
         return products;
+    }
+    
+    public Product findById(UUID productId) {
+        System.out.println("Buscando produto pelo id: " + productId);
+        Product product = productRepository.findById(productId).orElse(null);
+        System.out.println("Produto encontrado!");
+        return product;
     }
 
     public List<Product> findByProductName(String productName) {

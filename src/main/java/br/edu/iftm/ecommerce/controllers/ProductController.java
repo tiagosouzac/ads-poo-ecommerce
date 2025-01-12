@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 public class ProductController {
@@ -14,6 +15,10 @@ public class ProductController {
 
     public List<Product> getProducts() {
         return this.productService.findAll();
+    }
+    
+    public Product getProductById(UUID productId) {
+        return this.productService.findById(productId);
     }
 
     public void saveProduct(Product product) {
