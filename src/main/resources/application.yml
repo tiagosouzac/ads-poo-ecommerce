@@ -3,8 +3,8 @@ spring:
     name: ecommerce
   datasource:
     url: jdbc:postgresql://localhost:5432/ecommerce
-    username: user
-    password: password
+    username: postgres
+    password: 123456
   jpa:
     database: postgresql
     generate-ddl: true

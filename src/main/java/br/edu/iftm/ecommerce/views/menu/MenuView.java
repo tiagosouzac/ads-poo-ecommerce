@@ -3,7 +3,7 @@ package br.edu.iftm.ecommerce.views.menu;
 import br.edu.iftm.ecommerce.views.brand.BrandList;
 import br.edu.iftm.ecommerce.views.brand.BrandRegister;
 import br.edu.iftm.ecommerce.views.category.CategoryList;
-import br.edu.iftm.ecommerce.views.category.CategoryRegister;
+import br.edu.iftm.ecommerce.views.category.CategorySaver;
 import br.edu.iftm.ecommerce.views.customer.CustomerList;
 import br.edu.iftm.ecommerce.views.customer.CustomerRegister;
 import br.edu.iftm.ecommerce.views.order.OrderRegister;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 public class MenuView extends javax.swing.JFrame {
 
     @Autowired
-    private CategoryRegister categoryRegister;
+    private CategorySaver categoryRegister;
     
     @Autowired
     private CategoryList categoryList;
