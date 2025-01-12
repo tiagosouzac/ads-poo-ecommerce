@@ -1,7 +1,11 @@
 package br.edu.iftm.ecommerce.views.order;
 
 import br.edu.iftm.ecommerce.EcommerceApplication;
+import br.edu.iftm.ecommerce.controllers.OrderController;
+import br.edu.iftm.ecommerce.controllers.OrderItemController;
 import br.edu.iftm.ecommerce.controllers.ProductController;
+import br.edu.iftm.ecommerce.models.Order;
+import br.edu.iftm.ecommerce.models.OrderItem;
 import br.edu.iftm.ecommerce.models.Product;
 import br.edu.iftm.ecommerce.views.menu.MenuView;
 import jakarta.annotation.PostConstruct;
@@ -21,8 +25,12 @@ import org.springframework.stereotype.Component;
 public class OrderList extends javax.swing.JFrame {
     
     @Autowired
-    private ProductController productController;
-    private List<Product> productList;
+    private OrderController orderController;
+    private List<Order> orderList;
+    
+    @Autowired
+    private OrderItemController orderItemController;
+    private List<OrderItem> orderItemList;
     
     private final ApplicationContext context;
 
@@ -32,7 +40,7 @@ public class OrderList extends javax.swing.JFrame {
     public OrderList(ApplicationContext context) {
         initComponents();
         
-        productTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        orderTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
         @Override
         public void valueChanged(ListSelectionEvent e) {
             if (!e.getValueIsAdjusting()) {
@@ -42,12 +50,6 @@ public class OrderList extends javax.swing.JFrame {
     });
         
         this.context = context;
-        this.addWindowListener(new java.awt.event.WindowAdapter() {
-        @Override
-        public void windowActivated(java.awt.event.WindowEvent e) {
-            updateProductList();
-        }
-    });
     }
 
     /**
@@ -68,7 +70,7 @@ public class OrderList extends javax.swing.JFrame {
         searchTxt = new javax.swing.JTextField();
         searchButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        productTable = new javax.swing.JTable();
+        orderTable = new javax.swing.JTable();
         jLabel12 = new javax.swing.JLabel();
         nameRadioBtn = new javax.swing.JRadioButton();
         brandRadioBtn = new javax.swing.JRadioButton();
@@ -78,8 +80,8 @@ public class OrderList extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        descriptionTxt = new javax.swing.JTextArea();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        productTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -125,7 +127,7 @@ public class OrderList extends javax.swing.JFrame {
             }
         });
 
-        productTable.setModel(new javax.swing.table.DefaultTableModel(
+        orderTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null},
@@ -133,10 +135,10 @@ public class OrderList extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "Nome", "Preço", "Quantidade", "Marca", "Categoria", "Fornecedor"
+                "ID", "Desconto", "Subtotal", "Total", "Marca", "Categoria", "Fornecedor"
             }
         ));
-        jScrollPane1.setViewportView(productTable);
+        jScrollPane1.setViewportView(orderTable);
 
         jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
@@ -146,13 +148,13 @@ public class OrderList extends javax.swing.JFrame {
         radioBtnGroup.add(nameRadioBtn);
         nameRadioBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         nameRadioBtn.setForeground(new java.awt.Color(255, 255, 255));
-        nameRadioBtn.setText("Nome");
+        nameRadioBtn.setText("Cliente");
 
         brandRadioBtn.setBackground(new java.awt.Color(102, 102, 102));
         radioBtnGroup.add(brandRadioBtn);
         brandRadioBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         brandRadioBtn.setForeground(new java.awt.Color(255, 255, 255));
-        brandRadioBtn.setText("Marca");
+        brandRadioBtn.setText("Forma de pagamento");
 
         categoryRadioBtn.setBackground(new java.awt.Color(102, 102, 102));
         radioBtnGroup.add(categoryRadioBtn);
@@ -234,7 +236,7 @@ public class OrderList extends javax.swing.JFrame {
         jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel11.setText("Descrição produto selecionado");
+        jLabel11.setText("Produtos da Venda Selecionada");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -250,9 +252,18 @@ public class OrderList extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
 
-        descriptionTxt.setColumns(20);
-        descriptionTxt.setRows(5);
-        jScrollPane2.setViewportView(descriptionTxt);
+        productTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "ID", "Nome", "Preço", "Quantidade", "Marca", "Categoria", "Fornecedor"
+            }
+        ));
+        jScrollPane3.setViewportView(productTable);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -273,12 +284,13 @@ public class OrderList extends javax.swing.JFrame {
                                 .addComponent(jLabel3))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(33, 33, 33)
-                                .addComponent(menuButton))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(136, 136, 136)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 608, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addComponent(menuButton)))
+                        .addGap(0, 707, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(63, 63, 63)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 780, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -288,9 +300,9 @@ public class OrderList extends javax.swing.JFrame {
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(40, 40, 40)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(13, 13, 13)
                 .addComponent(jLabel3)
                 .addGap(18, 18, 18)
                 .addComponent(menuButton)
@@ -313,61 +325,46 @@ public class OrderList extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void searchAndUpdateTable() {
-        String searchText = searchTxt.getText().trim();
-
-        if (searchText.isEmpty()) {
-            fillTable(productList);  
-            return;
-        }
-
-        List<Product> filteredList = new ArrayList<>();
-
-        if (supplierRadioBtn.isSelected()) {
-            filteredList = productController.searchProductsBySupplierName(searchText);
-        } else if (brandRadioBtn.isSelected()) {
-            filteredList = productController.searchProductsByBrandName(searchText);
-        } else if (categoryRadioBtn.isSelected()) {
-            filteredList = productController.searchProductsByCategoryName(searchText);
-        } else if(nameRadioBtn.isSelected()){
-            filteredList = productController.searchProductsByName(searchText);
-        }
-
-        fillTable(filteredList);
-
-        if (filteredList.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Nenhum produto encontrado.");
-        }
-    }
-    
-    private void updateProductList() {
-        try {
-            this.productList = productController.getProducts();
-            fillTable(this.productList);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Erro ao carregar produtos: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        }
-    }
-    
-    private void displayProductDescription(Product product) {
-        descriptionTxt.setText(product.getDescription());
-        descriptionTxt.setEditable(false);
-    }
+//        String searchText = searchTxt.getText().trim();
+//
+//        if (searchText.isEmpty()) {
+//            fillTable(productList);  
+//            return;
+//        }
+//
+//        List<Product> filteredList = new ArrayList<>();
+//
+//        if (supplierRadioBtn.isSelected()) {
+//            filteredList = productController.searchProductsBySupplierName(searchText);
+//        } else if (brandRadioBtn.isSelected()) {
+//            filteredList = productController.searchProductsByBrandName(searchText);
+//        } else if (categoryRadioBtn.isSelected()) {
+//            filteredList = productController.searchProductsByCategoryName(searchText);
+//        } else if(nameRadioBtn.isSelected()){
+//            filteredList = productController.searchProductsByName(searchText);
+//        }
+//
+//        fillTable(filteredList);
+//
+//        if (filteredList.isEmpty()) {
+//            JOptionPane.showMessageDialog(this, "Nenhum produto encontrado.");
+//        }
+    }   
 
     private void onRowSelected() {
-        int selectedRow = productTable.getSelectedRow();
+        int selectedRow = orderTable.getSelectedRow();
 
         if (selectedRow != -1) {
-            UUID selectedId = (UUID) productTable.getValueAt(selectedRow, 0);
+            UUID selectedId = (UUID) orderTable.getValueAt(selectedRow, 0);
 
-            Product selectedProduct = productController.getProducts().stream()
-                .filter(product -> product.getId().equals(selectedId))
+            Order selectedOrder = orderController.getOrders().stream()
+                .filter(order -> order.getId().equals(selectedId))
                 .findFirst()
                 .orElse(null);
 
-            if (selectedProduct != null) {
-                displayProductDescription(selectedProduct);
-            }
+//            if (selectedOrder != null) {
+//                displayProductDescription(selectedProduct);
+//            }
         }
     }
 
@@ -487,37 +484,55 @@ public class OrderList extends javax.swing.JFrame {
     @PostConstruct
     private void initData() {
         try {
-            this.productList = productController.getProducts();
-            fillTable(this.productList);
+            this.orderItemList = orderItemController.getOrderItems();
+            fillOrderItemTable(this.orderItemList);
+            this.orderList = orderController.getOrders();
+            fillOrderTable(this.orderList);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Erro ao carregar produtos: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }
 
-    private void fillTable(List<Product> list)
+    private void fillOrderTable(List<Order> list)
     {  
         DefaultTableModel table = (DefaultTableModel)
-        productTable.getModel();
-        productTable.getColumnModel().getColumn(0).setPreferredWidth(180);
-        productTable.getColumnModel().getColumn(1).setPreferredWidth(180);
-        productTable.getColumnModel().getColumn(2).setPreferredWidth(180); 
-        productTable.getColumnModel().getColumn(3).setPreferredWidth(180);
-        productTable.getColumnModel().getColumn(4).setPreferredWidth(180); 
-        productTable.getColumnModel().getColumn(5).setPreferredWidth(180); 
-        productTable.getColumnModel().getColumn(6).setPreferredWidth(180); 
+        orderTable.getModel();
+        orderTable.getColumnModel().getColumn(0).setPreferredWidth(180);
+        orderTable.getColumnModel().getColumn(1).setPreferredWidth(180);
+        orderTable.getColumnModel().getColumn(2).setPreferredWidth(180); 
+        orderTable.getColumnModel().getColumn(3).setPreferredWidth(180);
+        orderTable.getColumnModel().getColumn(4).setPreferredWidth(180); 
+        orderTable.getColumnModel().getColumn(5).setPreferredWidth(180); 
         table.setNumRows(0);
 
-        list.forEach(productItem -> {
-            table.addRow(new Object[]{productItem.getId(), productItem.getName(), productItem.getPrice(), productItem.getStock(),
-            productItem.getBrand().getName(), productItem.getCategory().getName(), productItem.getSupplier().getName()});
+        list.forEach(order -> {
+            table.addRow(new Object[]{order.getId(), order.getDiscount(), order.getSubtotal(), order.getTotal(),
+            order.getCustomer().getName(), order.getPayment().getType()});
+        }); 
+    }
+    
+    private void fillOrderItemTable(List<OrderItem> list)
+    {  
+        DefaultTableModel table = (DefaultTableModel)
+        orderTable.getModel();
+        orderTable.getColumnModel().getColumn(0).setPreferredWidth(180);
+        orderTable.getColumnModel().getColumn(1).setPreferredWidth(180);
+        orderTable.getColumnModel().getColumn(2).setPreferredWidth(180); 
+        orderTable.getColumnModel().getColumn(3).setPreferredWidth(180);
+        orderTable.getColumnModel().getColumn(4).setPreferredWidth(180); 
+        orderTable.getColumnModel().getColumn(5).setPreferredWidth(180); 
+        table.setNumRows(0);
+
+        list.forEach(orderItem -> {
+            table.addRow(new Object[]{orderItem.getId(), orderItem.getProduct().getName(), orderItem.getQuantity(), orderItem.getDiscount(),
+            orderItem.getSubtotal(), orderItem.getTotal()});
         }); 
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton brandRadioBtn;
     private javax.swing.JRadioButton categoryRadioBtn;
-    private javax.swing.JTextArea descriptionTxt;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -528,9 +543,10 @@ public class OrderList extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JButton menuButton;
     private javax.swing.JRadioButton nameRadioBtn;
+    private javax.swing.JTable orderTable;
     private javax.swing.JTable productTable;
     private javax.swing.ButtonGroup radioBtnGroup;
     private javax.swing.JButton searchButton;

@@ -654,7 +654,21 @@ public class OrderRegister extends javax.swing.JFrame {
                 checkAndUpdateTotal();
             }
         });
+        
+        productCmb.addActionListener(e -> {
+            updateItemPriceFromSelectedProduct();
+            checkAndUpdateTotal();
+        });
     }
+    
+    private void updateItemPriceFromSelectedProduct() {
+    int selectedIndex = productCmb.getSelectedIndex();
+    if (selectedIndex >= 0) {
+        Product selectedProduct = productController.getProducts().get(selectedIndex);
+        BigDecimal productPrice = selectedProduct.getPrice();
+        itemPriceTxt.setText(productPrice.setScale(2, RoundingMode.HALF_UP).toString());
+    }
+}
 
     private void checkAndUpdateTotal() {
         if (!quantityTxt.getText().isEmpty() && !itemPriceTxt.getText().isEmpty()) {
@@ -752,7 +766,7 @@ public class OrderRegister extends javax.swing.JFrame {
 
     private void fillTable(List<OrderItem> selectedOrderList) {
         DefaultTableModel table = (DefaultTableModel)
-                orderItemTable.getModel();
+        orderItemTable.getModel();
         orderItemTable.getColumnModel().getColumn(0).setPreferredWidth(180);
         orderItemTable.getColumnModel().getColumn(1).setPreferredWidth(180);
         orderItemTable.getColumnModel().getColumn(2).setPreferredWidth(180);

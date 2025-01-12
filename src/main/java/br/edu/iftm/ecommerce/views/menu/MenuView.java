@@ -6,6 +6,7 @@ import br.edu.iftm.ecommerce.views.category.CategoryList;
 import br.edu.iftm.ecommerce.views.category.CategorySaver;
 import br.edu.iftm.ecommerce.views.customer.CustomerList;
 import br.edu.iftm.ecommerce.views.customer.CustomerRegister;
+import br.edu.iftm.ecommerce.views.order.OrderList;
 import br.edu.iftm.ecommerce.views.order.OrderRegister;
 import br.edu.iftm.ecommerce.views.product.ProductList;
 import br.edu.iftm.ecommerce.views.product.ProductRegister;
@@ -24,33 +25,35 @@ public class MenuView extends javax.swing.JFrame {
     private CategoryList categoryList;
     
     @Autowired
-    CustomerRegister customerRegister;
+    private CustomerRegister customerRegister;
     
     @Autowired
-    CustomerList customerList;
+    private CustomerList customerList;
     
     @Autowired
-    BrandRegister brandRegister;
+    private BrandRegister brandRegister;
     
     @Autowired
-    BrandList brandList;
+    private BrandList brandList;
     
     @Autowired
-    SupplierRegister supplierRegister;
+    private SupplierRegister supplierRegister;
     
     @Autowired
-    SupplierList supplierList;
+    private SupplierList supplierList;
     
     @Autowired
-    ProductRegister productRegister;
+    private ProductRegister productRegister;
     
     @Autowired
-    ProductList productList;
+    private ProductList productList;
     
     @Autowired
-    OrderRegister orderRegister;
+    private OrderRegister orderRegister;
+    
+    @Autowired
+    private OrderList orderList;
 
-    
     /**
      * Creates new form MenuView
      */
@@ -82,6 +85,7 @@ public class MenuView extends javax.swing.JFrame {
         jMenuItem7 = new javax.swing.JMenuItem();
         jMenuItem8 = new javax.swing.JMenuItem();
         jMenuItem9 = new javax.swing.JMenuItem();
+        jMenuItem11 = new javax.swing.JMenuItem();
         jMenuVenda = new javax.swing.JMenu();
         jMenuItem10 = new javax.swing.JMenuItem();
 
@@ -195,6 +199,14 @@ public class MenuView extends javax.swing.JFrame {
         });
         jMenuListagem.add(jMenuItem9);
 
+        jMenuItem11.setText("Lista de Vendas");
+        jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem11ActionPerformed(evt);
+            }
+        });
+        jMenuListagem.add(jMenuItem11);
+
         jMenuBar1.add(jMenuListagem);
 
         jMenuVenda.setText("Venda");
@@ -281,6 +293,11 @@ public class MenuView extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_jMenuItem10ActionPerformed
 
+    private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
+        orderList.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jMenuItem11ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -323,6 +340,7 @@ public class MenuView extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem10;
+    private javax.swing.JMenuItem jMenuItem11;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
