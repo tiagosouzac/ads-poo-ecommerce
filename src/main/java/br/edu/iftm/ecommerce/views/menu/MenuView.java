@@ -11,7 +11,7 @@ import br.edu.iftm.ecommerce.views.order.OrderRegister;
 import br.edu.iftm.ecommerce.views.product.ProductList;
 import br.edu.iftm.ecommerce.views.product.ProductSaver;
 import br.edu.iftm.ecommerce.views.supplier.SupplierList;
-import br.edu.iftm.ecommerce.views.supplier.SupplierRegister;
+import br.edu.iftm.ecommerce.views.supplier.SupplierSaver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -37,7 +37,7 @@ public class MenuView extends javax.swing.JFrame {
     private BrandList brandList;
     
     @Autowired
-    private SupplierRegister supplierRegister;
+    private SupplierSaver supplierRegister;
     
     @Autowired
     private SupplierList supplierList;
