@@ -19,9 +19,6 @@ public class Payment {
     @Column(nullable = false)
     private PaymentStatus status;
 
-    @Column(nullable = false)
-    private String transactionCode;
-
     @OneToOne
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
@@ -52,14 +49,6 @@ public class Payment {
 
     public void setStatus(PaymentStatus status) {
         this.status = status;
-    }
-
-    public String getTransactionCode() {
-        return transactionCode;
-    }
-
-    public void setTransactionCode(String transactionCode) {
-        this.transactionCode = transactionCode;
     }
 
     public Order getOrder() {

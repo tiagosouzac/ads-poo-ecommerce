@@ -9,7 +9,6 @@ import br.edu.iftm.ecommerce.models.Payment;
 public class PaymentBuilder {
     private PaymentType type;
     private PaymentStatus status;
-    private String transactionCode;
     private Order order;
     private Customer customer;
 
@@ -20,11 +19,6 @@ public class PaymentBuilder {
 
     public PaymentBuilder status(PaymentStatus status) {
         this.status = status;
-        return this;
-    }
-
-    public PaymentBuilder transactionCode(String transactionCode) {
-        this.transactionCode = transactionCode;
         return this;
     }
 
@@ -42,7 +36,6 @@ public class PaymentBuilder {
         Payment payment = new Payment();
         payment.setType(this.type);
         payment.setStatus(this.status);
-        payment.setTransactionCode(this.transactionCode);
         payment.setOrder(this.order);
         payment.setCustomer(this.customer);
         return payment;
