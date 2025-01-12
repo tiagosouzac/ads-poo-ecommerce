@@ -19,10 +19,11 @@ public class OrderService {
         return orders;
     }
 
-    public void save(Order order) {
+    public Order save(Order order) {
         System.out.println("Salvando ordem...");
-        orderRepository.save(order);
+        order = orderRepository.save(order);
         System.out.println("Ordem salva com sucesso!");
+        return order;
     }
 
     public void delete(Order order) {

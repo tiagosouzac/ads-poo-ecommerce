@@ -19,7 +19,7 @@ public class CustomerService {
         System.out.println("Clientes encontrados!");
         return customers;
     }
-    
+
     public Customer findById(UUID customerId) {
         System.out.println("Buscando cliente pelo id: " + customerId);
         Customer customer = customerRepository.findById(customerId).orElse(null);

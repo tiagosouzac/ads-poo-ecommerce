@@ -19,7 +19,7 @@ public class ProductService {
         System.out.println("Produtos encontrados!");
         return products;
     }
-    
+
     public Product findById(UUID productId) {
         System.out.println("Buscando produto pelo id: " + productId);
         Product product = productRepository.findById(productId).orElse(null);

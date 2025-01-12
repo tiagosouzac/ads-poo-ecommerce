@@ -16,7 +16,7 @@ public class ProductController {
     public List<Product> getProducts() {
         return this.productService.findAll();
     }
-    
+
     public Product getProductById(UUID productId) {
         return this.productService.findById(productId);
     }

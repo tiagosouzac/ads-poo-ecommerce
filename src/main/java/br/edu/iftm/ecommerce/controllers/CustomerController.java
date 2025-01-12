@@ -16,7 +16,7 @@ public class CustomerController {
     public List<Customer> getCustomers() {
         return this.customerService.findAll();
     }
-    
+
     public Customer getCustomerById(UUID customerId) {
         return this.customerService.findById(customerId);
     }

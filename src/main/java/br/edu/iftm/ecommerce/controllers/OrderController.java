@@ -16,8 +16,8 @@ public class OrderController {
         return this.orderService.findAll();
     }
 
-    public void saveOrder(Order order) {
-        this.orderService.save(order);
+    public Order saveOrder(Order order) {
+        return this.orderService.save(order);
     }
 
     public void deleteOrder(Order order) {
