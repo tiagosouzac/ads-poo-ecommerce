@@ -1,7 +1,7 @@
 package br.edu.iftm.ecommerce.views.menu;
 
 import br.edu.iftm.ecommerce.views.brand.BrandList;
-import br.edu.iftm.ecommerce.views.brand.BrandRegister;
+import br.edu.iftm.ecommerce.views.brand.BrandSaver;
 import br.edu.iftm.ecommerce.views.category.CategoryList;
 import br.edu.iftm.ecommerce.views.category.CategorySaver;
 import br.edu.iftm.ecommerce.views.customer.CustomerList;
@@ -31,7 +31,7 @@ public class MenuView extends javax.swing.JFrame {
     private CustomerList customerList;
     
     @Autowired
-    private BrandRegister brandRegister;
+    private BrandSaver brandRegister;
     
     @Autowired
     private BrandList brandList;

@@ -65,7 +65,7 @@ public class CategorySaver extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         categoryCmb = new javax.swing.JComboBox<>();
-        consultButton = new javax.swing.JButton();
+        queryButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -113,7 +113,7 @@ public class CategorySaver extends javax.swing.JFrame {
         saveButton.setBackground(new java.awt.Color(0, 102, 51));
         saveButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         saveButton.setForeground(new java.awt.Color(255, 255, 255));
-        saveButton.setText("Salvar");
+        saveButton.setText("Criar");
         saveButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 saveButtonActionPerformed(evt);
@@ -229,13 +229,13 @@ public class CategorySaver extends javax.swing.JFrame {
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("Categoria:");
 
-        consultButton.setBackground(new java.awt.Color(102, 0, 153));
-        consultButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        consultButton.setForeground(new java.awt.Color(255, 255, 255));
-        consultButton.setText("Consultar");
-        consultButton.addActionListener(new java.awt.event.ActionListener() {
+        queryButton.setBackground(new java.awt.Color(102, 0, 153));
+        queryButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        queryButton.setForeground(new java.awt.Color(255, 255, 255));
+        queryButton.setText("Consultar");
+        queryButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                consultButtonActionPerformed(evt);
+                queryButtonActionPerformed(evt);
             }
         });
 
@@ -252,23 +252,24 @@ public class CategorySaver extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel8)
-                            .addComponent(jLabel7))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(categoryTxt)
-                            .addComponent(categoryCmb, 0, 404, Short.MAX_VALUE))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(39, 39, 39)
-                        .addComponent(menuButton)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(28, 28, 28)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel8)
+                                    .addComponent(jLabel7))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(categoryTxt)
+                                    .addComponent(categoryCmb, 0, 404, Short.MAX_VALUE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(39, 39, 39)
+                                .addComponent(menuButton)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 301, Short.MAX_VALUE)
-                .addComponent(consultButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(queryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(299, 299, 299))
         );
         jPanel1Layout.setVerticalGroup(
@@ -286,7 +287,7 @@ public class CategorySaver extends javax.swing.JFrame {
                     .addComponent(jLabel8)
                     .addComponent(categoryCmb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(consultButton)
+                .addComponent(queryButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -370,7 +371,7 @@ public class CategorySaver extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_menuButtonActionPerformed
 
-    private void consultButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultButtonActionPerformed
+    private void queryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_queryButtonActionPerformed
         int selectedIndex = categoryCmb.getSelectedIndex();
 
         if (selectedIndex != -1) {
@@ -386,7 +387,7 @@ public class CategorySaver extends javax.swing.JFrame {
                 descriptionTxt.setText(selectedCategory.getDescription());
             }
         }
-    }//GEN-LAST:event_consultButtonActionPerformed
+    }//GEN-LAST:event_queryButtonActionPerformed
 
     private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
         try {
@@ -464,7 +465,6 @@ public class CategorySaver extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> categoryCmb;
     private javax.swing.JTextField categoryTxt;
-    private javax.swing.JButton consultButton;
     private javax.swing.JTextArea descriptionTxt;
     private javax.swing.JButton editButton;
     private javax.swing.JLabel jLabel1;
@@ -482,6 +482,7 @@ public class CategorySaver extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton menuButton;
     private javax.swing.JTextField nameTxt;
+    private javax.swing.JButton queryButton;
     private javax.swing.JButton saveButton;
     // End of variables declaration//GEN-END:variables
 }
