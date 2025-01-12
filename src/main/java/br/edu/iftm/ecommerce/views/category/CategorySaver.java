@@ -402,10 +402,9 @@ public class CategorySaver extends javax.swing.JFrame {
                     .orElse(null);
 
                 if (selectedCategory != null) {
-                    UUID categoryId = selectedCategory.getId();
                     selectedCategory.setName(strName);
                     selectedCategory.setDescription(strDescription);
-                    controller.updateCategory(selectedCategory);
+                    controller.saveCategory(selectedCategory);
                     JOptionPane.showMessageDialog(null, "Categoria editada com sucesso!");
                 } else {
                     JOptionPane.showMessageDialog(null, "Categoria selecionada não encontrada.");

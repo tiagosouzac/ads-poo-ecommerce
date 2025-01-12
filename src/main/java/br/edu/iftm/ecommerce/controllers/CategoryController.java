@@ -19,10 +19,6 @@ public class CategoryController {
     public void saveCategory(Category category) {
         this.categoryService.save(category);
     }
-    
-    public void updateCategory(Category category) {
-        this.categoryService.update(category);
-    }
 
     public void deleteCategory(Category category) {
         this.categoryService.delete(category);
