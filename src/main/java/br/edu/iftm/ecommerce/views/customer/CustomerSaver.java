@@ -626,7 +626,7 @@ public class CustomerSaver extends javax.swing.JFrame {
                 .zipCode(strZipCode).build();
 
         newAddress.setAddressable(customer);
-        customer.setAddress(newAddress);
+        customer.setAddresses(List.of(newAddress));
 
         controller.saveCustomer(customer);
 
@@ -644,6 +644,12 @@ public class CustomerSaver extends javax.swing.JFrame {
     }//GEN-LAST:event_menuButtonActionPerformed
 
     private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
+        int selectedIndex = customerCmb.getSelectedIndex();
+        if (selectedIndex < 0) {
+            JOptionPane.showMessageDialog(this, "Selecione um cliente para atualizar.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         try {
             String strName = nameTxt.getText().trim();
             String strEmail = emailTxt.getText().trim();
@@ -680,7 +686,7 @@ public class CustomerSaver extends javax.swing.JFrame {
                     .zipCode(strZipCode).build();
 
             newAddress.setAddressable(customer);
-            customer.setAddress(newAddress);
+            customer.setAddresses(List.of(newAddress));
             customer.setId(customerIdMap.get(customerCmb.getSelectedIndex()));
 
             controller.saveCustomer(customer);
@@ -699,7 +705,7 @@ public class CustomerSaver extends javax.swing.JFrame {
             Customer selectedCustomer = controller.getCustomerById(selectedCustomerId);
 
             if (selectedCustomer != null) {
-                Address address = selectedCustomer.getAddress();
+                Address address = selectedCustomer.getAddresses().get(0);
 
                 nameTxt.setText(selectedCustomer.getName());
                 emailTxt.setText(selectedCustomer.getEmail() != null ? selectedCustomer.getEmail() : "");
