@@ -363,7 +363,7 @@ public class CategoryList extends javax.swing.JFrame {
     }//GEN-LAST:event_menuButtonActionPerformed
 
     private void searchButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButton1ActionPerformed
-        // TODO add your handling code here:
+        searchAndUpdateTable();
     }//GEN-LAST:event_searchButton1ActionPerformed
 
     /**

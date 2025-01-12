@@ -12,6 +12,7 @@ import jakarta.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -40,15 +41,6 @@ public class OrderList extends javax.swing.JFrame {
     public OrderList(ApplicationContext context) {
         initComponents();
         
-        orderTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-        @Override
-        public void valueChanged(ListSelectionEvent e) {
-            if (!e.getValueIsAdjusting()) {
-                onRowSelected();
-            }
-        }
-    });
-        
         this.context = context;
     }
 
@@ -71,17 +63,12 @@ public class OrderList extends javax.swing.JFrame {
         searchButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         orderTable = new javax.swing.JTable();
-        jLabel12 = new javax.swing.JLabel();
-        nameRadioBtn = new javax.swing.JRadioButton();
-        brandRadioBtn = new javax.swing.JRadioButton();
-        categoryRadioBtn = new javax.swing.JRadioButton();
-        supplierRadioBtn = new javax.swing.JRadioButton();
         menuButton = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        productTable = new javax.swing.JTable();
+        orderItemTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -113,7 +100,7 @@ public class OrderList extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Entrada:");
+        jLabel2.setText("Nome do Cliente:");
 
         searchTxt.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
 
@@ -129,95 +116,44 @@ public class OrderList extends javax.swing.JFrame {
 
         orderTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "Desconto", "Subtotal", "Total", "Marca", "Categoria", "Fornecedor"
+                "ID", "Desconto", "Subtotal", "Total", "Cliente", "Pagamento"
             }
         ));
         jScrollPane1.setViewportView(orderTable);
-
-        jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel12.setText("Selecione uma forma de pesquisa:");
-
-        nameRadioBtn.setBackground(new java.awt.Color(102, 102, 102));
-        radioBtnGroup.add(nameRadioBtn);
-        nameRadioBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        nameRadioBtn.setForeground(new java.awt.Color(255, 255, 255));
-        nameRadioBtn.setText("Cliente");
-
-        brandRadioBtn.setBackground(new java.awt.Color(102, 102, 102));
-        radioBtnGroup.add(brandRadioBtn);
-        brandRadioBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        brandRadioBtn.setForeground(new java.awt.Color(255, 255, 255));
-        brandRadioBtn.setText("Forma de pagamento");
-
-        categoryRadioBtn.setBackground(new java.awt.Color(102, 102, 102));
-        radioBtnGroup.add(categoryRadioBtn);
-        categoryRadioBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        categoryRadioBtn.setForeground(new java.awt.Color(255, 255, 255));
-        categoryRadioBtn.setText("Categoria");
-
-        supplierRadioBtn.setBackground(new java.awt.Color(102, 102, 102));
-        radioBtnGroup.add(supplierRadioBtn);
-        supplierRadioBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        supplierRadioBtn.setForeground(new java.awt.Color(255, 255, 255));
-        supplierRadioBtn.setText("Fornecedor");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel12)
-                .addGap(323, 323, 323))
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(53, 53, 53)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 780, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(53, 53, 53)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 780, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(searchTxt)
-                                .addGap(18, 18, 18)
-                                .addComponent(searchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(209, 209, 209)
-                        .addComponent(nameRadioBtn)
-                        .addGap(55, 55, 55)
-                        .addComponent(brandRadioBtn)
-                        .addGap(58, 58, 58)
-                        .addComponent(categoryRadioBtn)
-                        .addGap(40, 40, 40)
-                        .addComponent(supplierRadioBtn)))
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(searchTxt)
+                        .addGap(18, 18, 18)
+                        .addComponent(searchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(51, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel12)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(supplierRadioBtn)
-                    .addComponent(categoryRadioBtn)
-                    .addComponent(brandRadioBtn)
-                    .addComponent(nameRadioBtn))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(searchTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(searchButton))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(95, 95, 95))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31))
         );
 
         menuButton.setBackground(new java.awt.Color(102, 0, 51));
@@ -252,7 +188,7 @@ public class OrderList extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
 
-        productTable.setModel(new javax.swing.table.DefaultTableModel(
+        orderItemTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null},
@@ -263,7 +199,7 @@ public class OrderList extends javax.swing.JFrame {
                 "ID", "Nome", "Preço", "Quantidade", "Marca", "Categoria", "Fornecedor"
             }
         ));
-        jScrollPane3.setViewportView(productTable);
+        jScrollPane3.setViewportView(orderItemTable);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -324,52 +260,27 @@ public class OrderList extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void searchAndUpdateTable() {
-//        String searchText = searchTxt.getText().trim();
-//
-//        if (searchText.isEmpty()) {
-//            fillTable(productList);  
-//            return;
-//        }
-//
-//        List<Product> filteredList = new ArrayList<>();
-//
-//        if (supplierRadioBtn.isSelected()) {
-//            filteredList = productController.searchProductsBySupplierName(searchText);
-//        } else if (brandRadioBtn.isSelected()) {
-//            filteredList = productController.searchProductsByBrandName(searchText);
-//        } else if (categoryRadioBtn.isSelected()) {
-//            filteredList = productController.searchProductsByCategoryName(searchText);
-//        } else if(nameRadioBtn.isSelected()){
-//            filteredList = productController.searchProductsByName(searchText);
-//        }
-//
-//        fillTable(filteredList);
-//
-//        if (filteredList.isEmpty()) {
-//            JOptionPane.showMessageDialog(this, "Nenhum produto encontrado.");
-//        }
-    }   
+    private void searchAndUpdateOrderTable() {
+        String searchText = searchTxt.getText().trim();
 
-    private void onRowSelected() {
-        int selectedRow = orderTable.getSelectedRow();
+        if (searchText.isEmpty()) {
+            fillOrderTable(orderList); 
+        } else {
+            List<Order> filteredList = orderList.stream()
+                    .filter(order -> order.getCustomer() != null && 
+                                     order.getCustomer().getName().toLowerCase().contains(searchText.toLowerCase()))
+                    .collect(Collectors.toList());
 
-        if (selectedRow != -1) {
-            UUID selectedId = (UUID) orderTable.getValueAt(selectedRow, 0);
+            fillOrderTable(filteredList);
 
-            Order selectedOrder = orderController.getOrders().stream()
-                .filter(order -> order.getId().equals(selectedId))
-                .findFirst()
-                .orElse(null);
-
-//            if (selectedOrder != null) {
-//                displayProductDescription(selectedProduct);
-//            }
+            if (filteredList.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Nenhum pedido encontrado para o cliente informado.");
+            }
         }
-    }
+}  
 
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
-        searchAndUpdateTable();
+        searchAndUpdateOrderTable();
     }//GEN-LAST:event_searchButtonActionPerformed
 
     private void menuButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButtonActionPerformed
@@ -494,10 +405,14 @@ public class OrderList extends javax.swing.JFrame {
         }
     }
 
-    private void fillOrderTable(List<Order> list)
-    {  
-        DefaultTableModel table = (DefaultTableModel)
-        orderTable.getModel();
+    private void fillOrderTable(List<Order> orderList) {  
+        System.out.println("Lista de pedidos: " + orderList.size());
+        if (orderList.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Nenhum pedido encontrado.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        DefaultTableModel table = (DefaultTableModel) orderTable.getModel();
         orderTable.getColumnModel().getColumn(0).setPreferredWidth(180);
         orderTable.getColumnModel().getColumn(1).setPreferredWidth(180);
         orderTable.getColumnModel().getColumn(2).setPreferredWidth(180); 
@@ -506,36 +421,47 @@ public class OrderList extends javax.swing.JFrame {
         orderTable.getColumnModel().getColumn(5).setPreferredWidth(180); 
         table.setNumRows(0);
 
-        list.forEach(order -> {
-            table.addRow(new Object[]{order.getId(), order.getDiscount(), order.getSubtotal(), order.getTotal(),
-            order.getCustomer().getName(), order.getPayment().getType()});
+        orderList.forEach(order -> {
+            table.addRow(new Object[]{
+                order.getId(), 
+                order.getDiscount(), 
+                order.getSubtotal(), 
+                order.getTotal(),
+                order.getCustomer().getName(), 
+                order.getPayment().getType()
+            });
         }); 
     }
     
-    private void fillOrderItemTable(List<OrderItem> list)
-    {  
-        DefaultTableModel table = (DefaultTableModel)
-        orderTable.getModel();
+    private void fillOrderItemTable(List<OrderItem> orderItemList) {  
+        DefaultTableModel tableModel = (DefaultTableModel) orderTable.getModel();
+
+        tableModel.setRowCount(0);
+
         orderTable.getColumnModel().getColumn(0).setPreferredWidth(180);
         orderTable.getColumnModel().getColumn(1).setPreferredWidth(180);
-        orderTable.getColumnModel().getColumn(2).setPreferredWidth(180); 
+        orderTable.getColumnModel().getColumn(2).setPreferredWidth(180);
         orderTable.getColumnModel().getColumn(3).setPreferredWidth(180);
-        orderTable.getColumnModel().getColumn(4).setPreferredWidth(180); 
-        orderTable.getColumnModel().getColumn(5).setPreferredWidth(180); 
-        table.setNumRows(0);
+        orderTable.getColumnModel().getColumn(4).setPreferredWidth(180);
+        orderTable.getColumnModel().getColumn(5).setPreferredWidth(180);
 
-        list.forEach(orderItem -> {
-            table.addRow(new Object[]{orderItem.getId(), orderItem.getProduct().getName(), orderItem.getQuantity(), orderItem.getDiscount(),
-            orderItem.getSubtotal(), orderItem.getTotal()});
-        }); 
+        for (OrderItem orderItem : orderItemList) {
+            tableModel.addRow(new Object[] {
+                orderItem.getId(),
+                orderItem.getProduct().getName(),
+                orderItem.getQuantity(),
+                orderItem.getDiscount(),
+                orderItem.getSubtotal(),
+                orderItem.getTotal()
+            });
+        }
+
+        tableModel.fireTableDataChanged();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JRadioButton brandRadioBtn;
-    private javax.swing.JRadioButton categoryRadioBtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
@@ -545,12 +471,10 @@ public class OrderList extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JButton menuButton;
-    private javax.swing.JRadioButton nameRadioBtn;
+    private javax.swing.JTable orderItemTable;
     private javax.swing.JTable orderTable;
-    private javax.swing.JTable productTable;
     private javax.swing.ButtonGroup radioBtnGroup;
     private javax.swing.JButton searchButton;
     private javax.swing.JTextField searchTxt;
-    private javax.swing.JRadioButton supplierRadioBtn;
     // End of variables declaration//GEN-END:variables
 }
