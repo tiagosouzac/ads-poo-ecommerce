@@ -11,7 +11,7 @@ public class CustomerBuilder {
     private String name;
     private String email;
     private String phone;
-    private List<Address> addresses;
+    private Address address;
     private List<Order> orders;
     private List<Payment> payments;
 
@@ -30,8 +30,8 @@ public class CustomerBuilder {
         return this;
     }
 
-    public CustomerBuilder addresses(List<Address> addresses) {
-        this.addresses = addresses;
+    public CustomerBuilder address(Address address) {
+        this.address = address;
         return this;
     }
 
@@ -50,7 +50,7 @@ public class CustomerBuilder {
         customer.setName(this.name);
         customer.setEmail(this.email);
         customer.setPhone(this.phone);
-        customer.setAddresses(this.addresses);
+        customer.setAddress(this.address);
         customer.setOrders(this.orders);
         customer.setPayments(this.payments);
         return customer;
