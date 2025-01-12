@@ -17,8 +17,8 @@ public class OrderItemController {
         return this.orderItemService.findAll();
     }
 
-    public OrderItem getOrderItemById(UUID id) {
-        return this.orderItemService.findById(id);
+    public List<OrderItem> getOrderItemsByOrderId(UUID orderId) {
+        return this.orderItemService.findAllByOrderId(orderId);
     }
 
     public void saveOrderItem(OrderItem orderItem) {

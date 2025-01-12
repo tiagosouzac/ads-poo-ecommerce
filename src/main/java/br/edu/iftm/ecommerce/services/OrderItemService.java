@@ -20,11 +20,11 @@ public class OrderItemService {
         return orderItems;
     }
 
-    public OrderItem findById(UUID id) {
-        System.out.println("Buscando item por id...");
-        OrderItem orderItem = orderItemRepository.findById(id).orElse(null);
+    public List<OrderItem> findAllByOrderId(UUID orderId) {
+        System.out.println("Buscando item por orderId...");
+        List<OrderItem> orderItems = orderItemRepository.findAllByOrderId(orderId);
         System.out.println("Item encontrado!");
-        return orderItem;
+        return orderItems;
     }
 
     public void save(OrderItem orderItem) {
