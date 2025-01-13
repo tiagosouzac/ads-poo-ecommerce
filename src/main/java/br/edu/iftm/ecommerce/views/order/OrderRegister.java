@@ -58,6 +58,16 @@ public class OrderRegister extends javax.swing.JFrame {
         setupPaymentCmb();
     }
 
+    private void reset() {
+        customerTxt.setText("");
+        customerCmb.removeAllItems();
+        clearProductSelectorFields();
+        selectedOrderItems.clear();
+        fillTable(selectedOrderItems);
+        paymentCmb.setSelectedIndex(0);
+        updateOrderTotal();
+    }
+
     private void setupCustomerCmb() {
         customerTxt.addCaretListener((evt) -> {
             customerCmb.removeAllItems();
@@ -385,14 +395,6 @@ public class OrderRegister extends javax.swing.JFrame {
         reset();
     }
 
-    private void reset() {
-        customerTxt.setText("");
-        customerCmb.removeAllItems();
-        clearProductSelectorFields();
-        selectedOrderItems.clear();
-        fillTable(selectedOrderItems);
-        updateOrderTotal();
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -881,6 +883,7 @@ public class OrderRegister extends javax.swing.JFrame {
     }
 
     private void menuButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButtonActionPerformed
+        reset();
         MenuView menuView = context.getBean(MenuView.class);
         menuView.setVisible(true);
         dispose();

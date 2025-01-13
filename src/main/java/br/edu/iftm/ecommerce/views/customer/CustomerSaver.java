@@ -42,6 +42,23 @@ public class CustomerSaver extends javax.swing.JFrame {
         setupCustomerAutocomplete();
     }
 
+    private void reset() {
+        nameTxt.setText("");
+        emailTxt.setText("");
+        phoneTxt.setText("");
+        streetTxt.setText("");
+        numberTxt.setText("");
+        neighborhoodTxt.setText("");
+        complementTxt.setText("");
+        cityTxt.setText("");
+        stateTxt.setText("");
+        countryTxt.setText("");
+        zipCodeTxt.setText("");
+        customerTxt.setText("");
+        customerCmb.removeAllItems();
+        customerIdMap.clear();
+    }
+
     private final Map<Integer, UUID> customerIdMap = new HashMap<>();
 
     private void setupCustomerAutocomplete() {
@@ -641,6 +658,7 @@ public class CustomerSaver extends javax.swing.JFrame {
     }//GEN-LAST:event_saveButtonActionPerformed
 
     private void menuButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuButtonActionPerformed
+        reset();
         MenuView menuView = context.getBean(MenuView.class);
         menuView.setVisible(true);
         dispose();
