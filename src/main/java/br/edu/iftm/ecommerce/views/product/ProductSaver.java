@@ -773,6 +773,9 @@ public class ProductSaver extends javax.swing.JFrame {
     }//GEN-LAST:event_menuButtonActionPerformed
 
     private void queryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_queryButtonActionPerformed
+        supplierCmb.removeAllItems();
+        brandCmb.removeAllItems();
+        categoryCmb.removeAllItems();
         int selectedIndex = productCmb.getSelectedIndex();
 
         if (selectedIndex >= 0) {
