@@ -36,7 +36,7 @@ public class CustomerService {
 
     public Customer findByName(String name) {
         System.out.println("Buscando cliente pelo nome: " + name);
-        Customer customer = customerRepository.findByNameContainingIgnoreCase(name);
+        Customer customer = customerRepository.findByName(name);
         System.out.println("Cliente encontrado!");
         return customer;
     }

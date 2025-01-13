@@ -1,14 +1,14 @@
 package br.edu.iftm.ecommerce.views.order;
 
 import br.edu.iftm.ecommerce.EcommerceApplication;
-import br.edu.iftm.ecommerce.builders.OrderBuilder;
 import br.edu.iftm.ecommerce.builders.OrderItemBuilder;
-import br.edu.iftm.ecommerce.controllers.*;
-import br.edu.iftm.ecommerce.enums.OrderStatus;
+import br.edu.iftm.ecommerce.controllers.CustomerController;
+import br.edu.iftm.ecommerce.controllers.ProductController;
 import br.edu.iftm.ecommerce.enums.PaymentType;
-import br.edu.iftm.ecommerce.factories.PaymentMethodFactory;
-import br.edu.iftm.ecommerce.models.*;
-import br.edu.iftm.ecommerce.strategies.payment.PaymentMethod;
+import br.edu.iftm.ecommerce.facade.OrderProcessor;
+import br.edu.iftm.ecommerce.models.Customer;
+import br.edu.iftm.ecommerce.models.OrderItem;
+import br.edu.iftm.ecommerce.models.Product;
 import br.edu.iftm.ecommerce.views.menu.MenuView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -32,13 +32,7 @@ public class OrderRegister extends javax.swing.JFrame {
     private ProductController productController;
 
     @Autowired
-    private OrderController orderController;
-
-    @Autowired
-    private PaymentController paymentController;
-
-    @Autowired
-    private OrderItemController orderItemController;
+    private OrderProcessor orderProcessor;
 
     private List<OrderItem> selectedOrderItems = new ArrayList<>();
 
@@ -365,30 +359,10 @@ public class OrderRegister extends javax.swing.JFrame {
             return;
         }
 
-        Order order = new OrderBuilder()
-                .subtotal(getOrderSubTotal())
-                .discount(getOrderDiscount())
-                .total(getOrderTotal())
-                .status(OrderStatus.PENDING)
-                .customer(customer)
-                .build();
-
-        order = orderController.saveOrder(order);
-
-        for (OrderItem orderItem : selectedOrderItems) {
-            orderItem.setOrder(order);
-            orderItemController.saveOrderItem(orderItem);
-        }
-
-        PaymentMethodFactory paymentMethodFactory = new PaymentMethodFactory();
-        PaymentMethod paymentMethod = paymentMethodFactory.createPaymentMethod(paymentType);
-        Payment payment = paymentMethod.createPayment(order, customer);
-
-        paymentController.savePayment(payment);
-
-        selectedOrderItems.forEach(orderItem -> {
-            productController.decreaseProductStock(orderItem.getProduct().getId(), orderItem.getQuantity());
-        });
+        orderProcessor.setOrderItems(selectedOrderItems);
+        orderProcessor.setCustomer(customer);
+        orderProcessor.setPaymentType(paymentType);
+        orderProcessor.processOrder();
 
         JOptionPane.showMessageDialog(this, "Venda realizada com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
 

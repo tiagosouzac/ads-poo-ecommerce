@@ -9,7 +9,7 @@ import java.util.UUID;
 public interface CustomerRepository extends JpaRepository<Customer, UUID> {
     List<Customer> findAllByNameContainingIgnoreCase(String name);
 
-    Customer findByNameContainingIgnoreCase(String name);
+    Customer findByName(String name);
 
     boolean existsByEmail(String email);
 }
