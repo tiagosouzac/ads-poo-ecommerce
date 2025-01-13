@@ -43,6 +43,14 @@ public class CustomerService {
 
     public void save(Customer customer) {
         System.out.println("Salvando cliente...");
+
+        boolean customerExists = customerRepository.existsByEmail(customer.getEmail());
+
+        if (customerExists) {
+            System.out.println("E-mail já cadastrado!");
+            throw new RuntimeException("E-mail já cadastrado!");
+        }
+
         customerRepository.save(customer);
         System.out.println("Cliente salvo com sucesso!");
     }
